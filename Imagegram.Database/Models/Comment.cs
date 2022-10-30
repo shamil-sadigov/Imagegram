@@ -1,10 +1,10 @@
 
-namespace Imagegram.Database;
+namespace Imagegram.Database.Models;
 
 #pragma warning disable CS8618
 public class Comment
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     
     /// <summary>
     /// User who made a comment

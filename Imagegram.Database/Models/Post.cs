@@ -1,9 +1,9 @@
 ﻿#pragma warning disable CS8618
-namespace Imagegram.Database;
+namespace Imagegram.Database.Models;
 
 public class Post
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     
     public int OwnerId { get; set; }
     
@@ -12,7 +12,7 @@ public class Post
     // TODO: Any limit ?
     public string Description { get; set; }
     
-    public string ImageUrl { get; set; }
+    public PostImage Image { get; set; }
     
-    public List<Comment> Comments { get;  set; }
+    public List<Comment>? Comments { get;  set; }
 }
