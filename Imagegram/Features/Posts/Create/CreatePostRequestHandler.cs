@@ -10,8 +10,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, Creat
     private readonly ImageStorage _imageStorage;
     private readonly ApplicationDbContext _dbContext;
     private readonly ILogger<CreatePostRequestHandler> _logger;
-
-
+    
     public CreatePostRequestHandler(
         ILogger<CreatePostRequestHandler> logger, 
         ImageProcessor imageProcessor,
