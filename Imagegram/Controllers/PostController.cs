@@ -15,7 +15,7 @@ public class PostController : ControllerBase
     [HttpPost]
     [RequestFormLimits(MultipartBodyLengthLimit = 268435456)]
     [RequestSizeLimit(268435456)]
-    public async Task<IActionResult> Get([FromForm] CreatePostRequest request)
+    public async Task<IActionResult> Get([FromForm] CreatePostCommand command)
     {
         var startNew = Stopwatch.StartNew();
         

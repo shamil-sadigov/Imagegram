@@ -18,4 +18,8 @@
       <Folder Include="Features\Comments" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Imagegram.Database\Imagegram.Database.csproj" />
+    </ItemGroup>
+
 </Project>

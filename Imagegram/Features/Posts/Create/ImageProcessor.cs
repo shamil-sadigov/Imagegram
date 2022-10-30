@@ -14,7 +14,7 @@ public sealed class ImageProcessor
     /// Processed image is written to <see cref="targetStream"/>
     /// 
     /// </summary>
-    public void ProcessImage(Stream sourceImageStream, Stream targetImageStream)
+    public Stream ProcessImage(Stream sourceImageStream)
     {
         var image = Image.Load(sourceImageStream);
         
@@ -22,7 +22,9 @@ public sealed class ImageProcessor
         
         image.Mutate(x => x.Resize(allowedSize, height));
         
-        image.SaveAsJpeg(targetImageStream);
+        var processedImageStream = new MemoryStream();
+        image.SaveAsJpeg(processedImageStream);
+        return processedImageStream;
     }
 }
 
