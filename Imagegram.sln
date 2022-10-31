@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imagegram", "Imagegram\Imag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imagegram.Database", "Imagegram.Database\Imagegram.Database.csproj", "{0CA77CE0-2B43-40A1-A7B1-669A12D61565}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imagegram.Tests", "Imagegram.Tests\Imagegram.Tests.csproj", "{59D09AF8-4EAB-44DB-A2FA-6C9184EDAED8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0CA77CE0-2B43-40A1-A7B1-669A12D61565}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CA77CE0-2B43-40A1-A7B1-669A12D61565}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CA77CE0-2B43-40A1-A7B1-669A12D61565}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59D09AF8-4EAB-44DB-A2FA-6C9184EDAED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D09AF8-4EAB-44DB-A2FA-6C9184EDAED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59D09AF8-4EAB-44DB-A2FA-6C9184EDAED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D09AF8-4EAB-44DB-A2FA-6C9184EDAED8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
