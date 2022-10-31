@@ -2,16 +2,14 @@
 namespace Imagegram.Database.Models;
 
 #pragma warning disable CS8618
-public class Comment
+public sealed class Comment:BaseEntity
 {
-    public long Id { get; set; }
-    
     /// <summary>
     /// User who made a comment
     /// </summary>
-    public int UserId { get; set; }
+    public int UserId { get; init; }
     
-    public string Text { get; set; }
+    public string Text { get; init; }
     
-    public int PostId { get; set; }
+    public int PostId { get; init; }
 }

@@ -15,52 +15,79 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
+    
     public DbSet<Comment> Comments { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
     }
 
+    // TODO: Extract to configuration types
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(x => x.Id);
-            entity.Property(x => x.Password).HasMaxLength(256);
-            entity.Property(x => x.Email).HasMaxLength(256);
+            
+            entity.Property(x => x.Password)
+                .HasMaxLength(256);
+            
+            entity.Property(x => x.Email)
+                .HasMaxLength(256);
         });
 
+        // TODO: Add indexes
         modelBuilder.Entity<Post>(entity =>
         {
             entity.HasKey(x => x.Id);
+            
+            entity.HasOne(x=>x.Image)
+                .WithOne()
+                .HasForeignKey<PostImage>(x => x.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.Navigation(x => x.Image)
+                .AutoInclude();
 
             entity.HasOne<User>()
                 .WithOne()
-                .HasForeignKey<Post>(x => x.OwnerId);
-
-            entity.HasMany<Comment>()
+                .HasForeignKey<Post>(x => x.OwnerId)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            entity.HasMany(x=> x.Comments)
                 .WithOne()
-                .HasForeignKey(x => x.PostId);
-
+                .HasForeignKey(x => x.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.Metadata
+                .FindNavigation(nameof(Post.Comments))
+                .SetPropertyAccessMode(PropertyAccessMode.Field);
+            
             entity.Property(x => x.Description)
-                .HasMaxLength(2048);
+                .HasMaxLength(3072);
+
+            entity.Property(x => x.RowVersion)
+                .IsRowVersion()
+                .IsConcurrencyToken();
         });
+
 
         modelBuilder.Entity<Comment>(entity =>
         {
             entity.HasKey(x => x.Id);
 
             entity.Property(x => x.Text)
-                .HasMaxLength(2048);
+                .HasMaxLength(3072);
 
             entity.HasOne<User>()
                 .WithOne()
-                .HasForeignKey<Comment>(x => x.UserId);
+                .HasForeignKey<Comment>(x => x.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
         
         modelBuilder.Entity<PostImage>(entity =>
         {
-            entity.HasKey(x => x.Id);
+            entity.HasKey(x => x.PostId);
             
             entity.OwnsOne(x => x.ProcessedImage, w =>
             {
@@ -83,10 +110,8 @@ public class ApplicationDbContext : DbContext
                     .HasMaxLength(2048)
                     .HasColumnName("OriginalImageUri");
             });
-            
-            entity.HasOne<Post>()
-                .WithOne()
-                .HasForeignKey<PostImage>(x => x.PostId);
+
+    
         });
     }
 }
