@@ -3,22 +3,22 @@ namespace Imagegram.Features.Posts.GetPaginated;
 public sealed class PostCursor
 {
     public int NumberOfComments { get; }
-    public long Timestamp { get; }
+    public long RowVersion { get; }
 
-    public PostCursor(int numberOfComments, long timestamp)
+    public PostCursor(int numberOfComments, long rowVersion)
     {
         if (numberOfComments < 1)
         {
             throw new ArgumentOutOfRangeException(nameof(numberOfComments), "Should be greater than 0");
         }
         
-        if (timestamp < 1)
+        if (rowVersion < 1)
         {
-            throw new ArgumentOutOfRangeException(nameof(timestamp), "Should be greater than 0");
+            throw new ArgumentOutOfRangeException(nameof(rowVersion), "Should be greater than 0");
         }
 
         NumberOfComments = numberOfComments;
-        Timestamp = timestamp;
+        RowVersion = rowVersion;
     }
     
     // TODO: This should be used on controller side
@@ -34,16 +34,16 @@ public sealed class PostCursor
         if (!int.TryParse(values[0], out var numberOfComments))
             return false;
 
-        if (!long.TryParse(values[1], out var timestamp))
+        if (!long.TryParse(values[1], out var rowVersion))
             return false;
         
-        cursor =  new PostCursor(numberOfComments, timestamp);
+        cursor =  new PostCursor(numberOfComments, rowVersion);
         return true;
     }
     
     public string ToBase64()
     {
-        return $"{NumberOfComments}:{Timestamp}".ConvertToBase64();
+        return $"{NumberOfComments}:{RowVersion}".ConvertToBase64();
     }
     
 }

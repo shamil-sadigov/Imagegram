@@ -11,10 +11,10 @@ public class PostCursorTests
     [InlineData(3, 12, "3:12")]
     public void PostCursor_should_be_converted_to_correct_base64_representation(
         int numberOfComments, 
-        long timestamp, 
+        long rowVersion, 
         string expectedValue)
     {
-        var cursor = new PostCursor(numberOfComments, timestamp);
+        var cursor = new PostCursor(numberOfComments, rowVersion);
 
         var base64EncodedCursor = cursor.ToBase64();
 
@@ -27,7 +27,7 @@ public class PostCursorTests
     [InlineData(3, 12, "3:12")]
     public void PostCursor_can_be_created_from_correctly_encoded_base64_value(
         int expectedNumberOfComments, 
-        long expectedTimestamp, 
+        long expectedRowVersion, 
         string value)
     {
         // Arrange
@@ -39,7 +39,7 @@ public class PostCursorTests
         // Assert
         succeeded.Should().BeTrue();
         createdCursor.Should().NotBeNull();
-        createdCursor!.Timestamp.Should().Be(expectedTimestamp);
+        createdCursor!.RowVersion.Should().Be(expectedRowVersion);
         createdCursor!.NumberOfComments.Should().Be(expectedNumberOfComments);
     }
     
