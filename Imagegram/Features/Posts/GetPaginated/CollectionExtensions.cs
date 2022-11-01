@@ -1,4 +1,5 @@
-﻿using Imagegram.Features.Posts.GetPaginated.Pagination;
+﻿using Imagegram.Database.Models;
+using Imagegram.Features.Posts.GetPaginated.Pagination;
 
 namespace Imagegram.Features.Posts.GetPaginated;
 

@@ -73,7 +73,7 @@ public sealed class Post:BaseEntity
 
         if (commentToDelete is null)
         {
-            throw new InvalidOperationException($"AddComment with id '{commentId}' was not found");
+            throw new InvalidOperationException($"Comment with id '{commentId}' was not found");
         }
 
         _comments.Remove(commentToDelete);
