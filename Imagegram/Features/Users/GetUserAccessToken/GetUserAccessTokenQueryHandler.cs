@@ -1,7 +1,5 @@
 using Imagegram.Database;
-using Imagegram.Features.Users.CreateUser;
 using MediatR;
-using Microsoft.AspNetCore.DataProtection;
 
 namespace Imagegram.Features.Users.GetUserAccessToken;
 
@@ -31,7 +29,7 @@ public class GetUserAccessTokenQueryHandler : IRequestHandler<GetUserAccessToken
             throw new EntityNotFoundException($"User with email '{request.Email}' was not found");
         }
         
-        if (!_passwordManager.IsValidPassword(user, request.Password))
+        if (!_passwordManager.IsUserPasswordValid(user, request.Password))
         {
             throw new InvalidOperationException($"Provided password for user with email '{request.Email}' is not valid");
         }
