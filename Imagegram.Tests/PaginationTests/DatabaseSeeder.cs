@@ -53,7 +53,7 @@ public class DatabaseSeeder
             );
 
             foreach (var commentDto in dto.Comments.OrderBy(x => x.CreatedAt))
-                post.AddNewComment(commentDto.Text, newUsers.Random().Id, commentDto.CreatedAt);
+                post.AddComment(commentDto.Text, newUsers.Random().Id, commentDto.CreatedAt);
 
             return post;
         }).ToList();

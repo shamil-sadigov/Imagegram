@@ -21,7 +21,7 @@ public sealed class Post:BaseEntity
     
     public IReadOnlyCollection<Comment> Comments => _comments;
     
-    /// <param name="createdBy">userId of user who creates a post</param>
+    /// <param name="createdBy">commentedBy of user who creates a post</param>
     public Post(
         int createdBy,
         string description,
@@ -44,18 +44,22 @@ public sealed class Post:BaseEntity
         
     }
     
-    public void AddNewComment(string comment, int userId, DateTimeOffset currentDateTime)
+    public Comment AddComment(string comment, int commentedBy, DateTimeOffset currentDateTime)
     {
-        _comments!.Add(new Comment()
+        var newComment = new Comment()
         {
             PostId = Id,
             Text = comment,
-            CommentedBy = userId,
+            CommentedBy = commentedBy,
             CreatedAt = currentDateTime
-        });
+        };
+        
+        _comments!.Add(newComment);
         
         CommentCount++;
         LastTimeUpdatedAt = currentDateTime;
+
+        return newComment;
     }
     
     public void RemoveComment(int commentId, DateTimeOffset currentDateTime)
@@ -69,7 +73,7 @@ public sealed class Post:BaseEntity
 
         if (commentToDelete is null)
         {
-            throw new InvalidOperationException($"Comment with id '{commentId}' was not found");
+            throw new InvalidOperationException($"AddComment with id '{commentId}' was not found");
         }
 
         _comments.Remove(commentToDelete);

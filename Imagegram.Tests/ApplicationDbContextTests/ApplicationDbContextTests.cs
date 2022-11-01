@@ -80,8 +80,8 @@ public class ApplicationDbContextTests : IDisposable
         using (var newDbContext = new ApplicationDbContext(_dbOptions))
         {
             var post = newDbContext.Posts.First(x => x.Id == newPost.Id);
-            post.AddNewComment("user comment", someUser.Id, currentDateTime - 10.Seconds());
-            post.AddNewComment("user2 comment", someUser2.Id, currentDateTime);
+            post.AddComment("user comment", someUser.Id, currentDateTime - 10.Seconds());
+            post.AddComment("user2 comment", someUser2.Id, currentDateTime);
             await newDbContext.SaveChangesAsync();
         }
 
@@ -113,7 +113,7 @@ public class ApplicationDbContextTests : IDisposable
         (ApplicationDbContext dbContext, User postOwner) = RecreateDatabaseWithSomeUser();
 
         var newPost = CreateSomePost(postOwner);
-        newPost.AddNewComment("some-comment", postOwner.Id, DateTimeOffset.UtcNow);
+        newPost.AddComment("some-comment", postOwner.Id, DateTimeOffset.UtcNow);
 
         await dbContext.SaveEntitiesAsync(newPost);
 
