@@ -5,7 +5,7 @@ namespace Imagegram.Features.Users;
 
 // TODO: Register in IoC
 
-public class PasswordManager
+public class PasswordManager : IPasswordManager
 {
     private readonly IDataProtectionProvider _dataProtectionProvider;
 

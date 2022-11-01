@@ -8,11 +8,11 @@ namespace Imagegram.Features.Users.CreateUser;
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisteredUser>
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly PasswordManager _passwordManager;
+    private readonly IPasswordManager _passwordManager;
 
     public RegisterUserCommandHandler(
         ApplicationDbContext dbContext,
-        PasswordManager passwordManager)
+        IPasswordManager passwordManager)
     {
         _dbContext = dbContext;
         _passwordManager = passwordManager;
@@ -20,8 +20,6 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
     
     public async Task<RegisteredUser> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        // Just lightweight protection
-        
         var protectedPassword = _passwordManager.ProtectUserPassword(request.Email, request.Password);
 
         // TODO: Abstract from time

@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Imagegram.Features.Users.GetUserAccessToken;
+namespace Imagegram.Features.Users;
 
-// TODO: Configure in options
 public class AccessTokenOptions
 {
     /// <summary>

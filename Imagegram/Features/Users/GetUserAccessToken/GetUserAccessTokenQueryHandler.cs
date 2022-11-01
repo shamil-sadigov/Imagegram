@@ -7,12 +7,12 @@ namespace Imagegram.Features.Users.GetUserAccessToken;
 public class GetUserAccessTokenQueryHandler : IRequestHandler<GetUserAccessTokenQuery, UserAccessToken>
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly PasswordManager _passwordManager;
+    private readonly IPasswordManager _passwordManager;
     private readonly AccessTokenGenerator _accessTokenGenerator;
 
     public GetUserAccessTokenQueryHandler(
         ApplicationDbContext dbContext,
-        PasswordManager passwordManager,
+        IPasswordManager passwordManager,
         AccessTokenGenerator accessTokenGenerator)
     {
         _dbContext = dbContext;

@@ -4,7 +4,7 @@ using Imagegram.Database.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Imagegram.Features.Users.GetUserAccessToken;
+namespace Imagegram.Features.Users;
 
 // TODO: Register in IoC
 public class AccessTokenGenerator
