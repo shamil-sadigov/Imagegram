@@ -1,8 +1,10 @@
+using System.Text;
 using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Specialized;
-using Imagegram.Controllers;
 using Imagegram.Features.Posts.Create;
+using Imagegram.Features.Users.GetUserAccessToken;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 // TODO: Move to config
 const string blobStorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=sovsh;AccountKey=4LzhU4xxGoRxWJ84P9X71WK5DLsoJ8+/FOOdBoIuZsX9F7AVbsaE1ZghIGMjd6XtpAbZurpqqwHT+AStO0eUjA==;EndpointSuffix=core.windows.net";
@@ -22,6 +24,38 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ImageProcessor>();
 
 builder.Services.AddSingleton(new BlobServiceClient(blobStorageConnectionString));
+
+var accessTokenOptionsSection = builder.Configuration.GetSection("AccessTokenOptions");
+
+var accessTokenOptions = accessTokenOptionsSection.Get<AccessTokenOptions>();
+
+accessTokenOptions.ThrowIfNotValid();
+
+builder.Services.Configure<AccessTokenOptions>(accessTokenOptionsSection);
+
+builder.Services.AddAuthentication(ops =>
+    {
+        ops.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        ops.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        ops.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(ops =>
+    {
+        ops.SaveToken = true;
+        ops.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(accessTokenOptions.GetSecretBytes()),
+            ValidIssuer = accessTokenOptions.AppName,
+            ValidAudience = accessTokenOptions.AppName,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            RequireExpirationTime = false,
+            ValidateLifetime = false,
+            ClockSkew = TimeSpan.Zero
+        };;
+    });
+
 
 var app = builder.Build();
 

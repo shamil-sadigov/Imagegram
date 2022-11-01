@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Imagegram.Features.Users.GetUserAccessToken;
@@ -12,8 +13,15 @@ public class AccessTokenOptions
     
     public string AppName { get; set; }
     
-    public TimeSpan TokenLifetime { get; set; }
-    
     public byte[] GetSecretBytes()
         => Encoding.UTF8.GetBytes(SecretKey);
+
+    public void ThrowIfNotValid()
+    {
+        if (string.IsNullOrWhiteSpace(SecretKey))
+            throw new ValidationException($"{nameof(SecretKey)} is not provided for {nameof(AccessTokenOptions)}");
+        
+        if (string.IsNullOrWhiteSpace(SecretKey))
+            throw new ValidationException($"{nameof(AppName)} is not provided for {nameof(AccessTokenOptions)}");
+    }
 }
