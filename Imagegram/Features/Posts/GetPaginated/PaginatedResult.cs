@@ -1,13 +1,14 @@
 namespace Imagegram.Features.Posts.GetPaginated;
 
-public sealed record PaginatedResult<T>
+public record PaginatedResult<T, TCursor>
 (
-    int PageSize,
-    int? StartCursor,
-    int? EndCursor,
+    int RequestedPageSize,
+    int ActualPageSize,
+    TCursor? StartCursor,
+    TCursor? EndCursor,
     IEnumerable<T> Items,
-    bool HasMore
+    bool HasMoreItems
 )
 {
-    public static readonly PaginatedResult<T> Empty = new(0, null, null, Array.Empty<T>(), false);
+    public static readonly PaginatedResult<T, TCursor> Empty = new(0, 0, default, default, Array.Empty<T>(), false);
 }
