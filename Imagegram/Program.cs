@@ -1,4 +1,3 @@
-using System.Text;
 using Azure.Storage.Blobs;
 using Imagegram.Features.Posts.Create;
 using Imagegram.Features.Users.GetUserAccessToken;

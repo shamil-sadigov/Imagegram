@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Imagegram.Features;
-using Imagegram.Features.Posts.GetPaginated;
 using Imagegram.Features.Posts.GetPaginated.Pagination;
 
 namespace Imagegram.Tests;

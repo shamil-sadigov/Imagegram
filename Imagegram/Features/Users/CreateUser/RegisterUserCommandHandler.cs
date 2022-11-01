@@ -2,7 +2,6 @@ using Imagegram.Database;
 using Imagegram.Database.Models;
 using Imagegram.Features.Users.GetUserAccessToken;
 using MediatR;
-using Microsoft.AspNetCore.DataProtection;
 
 namespace Imagegram.Features.Users.CreateUser;
 

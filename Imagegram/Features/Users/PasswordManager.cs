@@ -1,7 +1,7 @@
 ﻿using Imagegram.Database.Models;
 using Microsoft.AspNetCore.DataProtection;
 
-namespace Imagegram.Features.Users.GetUserAccessToken;
+namespace Imagegram.Features.Users;
 
 // TODO: Register in IoC
 
