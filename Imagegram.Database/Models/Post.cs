@@ -1,13 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-#pragma warning disable CS8618
+﻿#pragma warning disable CS8618
 namespace Imagegram.Database.Models;
 
 public sealed class Post:BaseEntity
 {
     private List<Comment> _comments =  new(0);
     
-    public int OwnerId { get; }
+    /// <summary>
+    /// User who created post
+    /// </summary>
+    public int CreatedBy { get; }
     public string Description { get; }
     public PostImage Image { get; }
     
@@ -16,27 +17,25 @@ public sealed class Post:BaseEntity
 
     public byte[] RowVersion { get; private set; }
     
-    public DateTimeOffset? UpdatedAt { get; private set; }
+    public DateTimeOffset LastTimeUpdatedAt { get; private set; }
     
     public IReadOnlyCollection<Comment> Comments => _comments;
     
+    /// <param name="createdBy">userId of user who creates a post</param>
     public Post(
-        int ownerId,
+        int createdBy,
         string description,
         ImageInfo originalImage,
         ImageInfo processedImage,
         DateTimeOffset currentDateTime)
     {
-        // TODO: Validate correctly Description, ownerId
+        // TODO: Validate correctly Description, createdBy
         
-        OwnerId = ownerId;
+        CreatedBy = createdBy;
         Description = description ?? throw new ArgumentNullException(nameof(description));
-        Image = new PostImage()
-        {
-            OriginalImage = originalImage ?? throw new ArgumentNullException(nameof(originalImage)),
-            ProcessedImage = processedImage ?? throw new ArgumentNullException(nameof(processedImage))
-        };
+        Image = new PostImage(Id, processedImage, originalImage);
         CreatedAt = currentDateTime;
+        LastTimeUpdatedAt = currentDateTime;
     }
     
     // For Ef
@@ -51,32 +50,36 @@ public sealed class Post:BaseEntity
         {
             PostId = Id,
             Text = comment,
-            UserId = userId,
+            CommentedBy = userId,
             CreatedAt = currentDateTime
         });
         
         CommentCount++;
-        UpdatedAt = currentDateTime;
+        LastTimeUpdatedAt = currentDateTime;
     }
     
     public void RemoveComment(int commentId, DateTimeOffset currentDateTime)
     {
-        if (Comments is null)
+        if (_comments is null)
         {
             throw new InvalidOperationException("Post has no any comments");
         }
         
-        var commentToDelete = Comments.FirstOrDefault(x=> x.Id == commentId);
+        var commentToDelete = _comments.FirstOrDefault(x=> x.Id == commentId);
 
         if (commentToDelete is null)
         {
             throw new InvalidOperationException($"Comment with id '{commentId}' was not found");
         }
 
-        _comments!.Remove(commentToDelete);
+        _comments.Remove(commentToDelete);
         
         CommentCount--;
-        UpdatedAt = currentDateTime;
+        LastTimeUpdatedAt = currentDateTime;
     }
-    
+
+    public override string ToString()
+    {
+        return $"ID: {Id}, CommentCount: {CommentCount}, LastUpdate: {LastTimeUpdatedAt}";
+    }
 }

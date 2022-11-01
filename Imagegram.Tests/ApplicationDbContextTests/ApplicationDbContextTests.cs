@@ -5,10 +5,11 @@ using Imagegram.Database;
 using Imagegram.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Imagegram.Tests;
+namespace Imagegram.Tests.ApplicationDbContextTests;
 
 // TODO: Test that post is saved correctly
 
+// [CollectionDefinition("Non-parallel-tests", DisableParallelization = true)]
 public class ApplicationDbContextTests : IDisposable
 {
     // TODO: Extract
@@ -22,8 +23,7 @@ public class ApplicationDbContextTests : IDisposable
         using var dbContext = new ApplicationDbContext(_dbOptions);
         dbContext.Database.EnsureDeleted();
     }
-
-
+    
     [Fact]
     public async Task New_Post_is_correctly_saved_in_database()
     {
@@ -56,7 +56,7 @@ public class ApplicationDbContextTests : IDisposable
             foundPost.Image.ProcessedImage.Name.Should().Be("processed-image-name");
             foundPost.Image.ProcessedImage.Uri.Should().Be("processed-image-uri");
             foundPost.CreatedAt.Should().Be(currentDateTime);
-            foundPost.OwnerId.Should().Be(user.Id);
+            foundPost.CreatedBy.Should().Be(user.Id);
         }
     }
 
@@ -94,15 +94,15 @@ public class ApplicationDbContextTests : IDisposable
                 .First(x => x.Id == newPost.Id);
 
             foundPost.CommentCount.Should().Be(2);
-            foundPost.UpdatedAt.Should().Be(currentDateTime);
+            foundPost.LastTimeUpdatedAt.Should().Be(currentDateTime);
 
             foundPost.Comments.Should().HaveCount(2);
 
             foundPost.Comments.Should().Contain(
-                comment => comment.UserId == someUser.Id && comment.Text == "user comment");
+                comment => comment.CommentedBy == someUser.Id && comment.Text == "user comment");
 
             foundPost.Comments.Should().Contain(
-                comment => comment.UserId == someUser2.Id && comment.Text == "user2 comment");
+                comment => comment.CommentedBy == someUser2.Id && comment.Text == "user2 comment");
         }
     }
 
@@ -127,7 +127,7 @@ public class ApplicationDbContextTests : IDisposable
                 .Include(x => x.Comments)
                 .First(x => x.Id == newPost.Id);
 
-            var postOwnerComment = post.Comments.Single(x => x.UserId == postOwner.Id);
+            var postOwnerComment = post.Comments.Single(x => x.CommentedBy == postOwner.Id);
 
             post.RemoveComment(postOwnerComment.Id, currentDateTime);
 
@@ -145,7 +145,7 @@ public class ApplicationDbContextTests : IDisposable
             foundPost.Comments.Should().HaveCount(0);
             foundPost.CommentCount.Should().Be(0);
 
-            foundPost.UpdatedAt.Should().Be(currentDateTime);
+            foundPost.LastTimeUpdatedAt.Should().Be(currentDateTime);
         }
     }
 
@@ -177,7 +177,8 @@ public class ApplicationDbContextTests : IDisposable
         
         context.Database.EnsureCreated();
 
-        if (!context.Database.CanConnect()) throw new InvalidOperationException("Database is not accessible!");
+        if (!context.Database.CanConnect()) 
+            throw new InvalidOperationException("Database is not accessible!");
 
         var user = new User
         {

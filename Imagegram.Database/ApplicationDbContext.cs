@@ -50,9 +50,9 @@ public class ApplicationDbContext : DbContext
                 .AutoInclude();
 
             entity.HasOne<User>()
-                .WithOne()
-                .HasForeignKey<Post>(x => x.OwnerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany()
+                .HasForeignKey(x => x.CreatedBy);
+                // .OnDelete(DeleteBehavior.Restrict);
             
             entity.HasMany(x=> x.Comments)
                 .WithOne()
@@ -80,9 +80,9 @@ public class ApplicationDbContext : DbContext
                 .HasMaxLength(3072);
 
             entity.HasOne<User>()
-                .WithOne()
-                .HasForeignKey<Comment>(x => x.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany()
+                .HasForeignKey(x => x.CommentedBy)
+                .OnDelete(DeleteBehavior.NoAction);
         });
         
         modelBuilder.Entity<PostImage>(entity =>

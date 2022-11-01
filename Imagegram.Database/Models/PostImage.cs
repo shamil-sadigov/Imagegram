@@ -3,9 +3,22 @@
 #pragma warning disable CS8618
 public sealed class PostImage
 {
-    public int PostId { get; set; }
+    public PostImage(int postId, ImageInfo processedImage, ImageInfo originalImage)
+    {
+        PostId = postId;
+        ProcessedImage = processedImage ?? throw new ArgumentNullException(nameof(processedImage));
+        OriginalImage = originalImage ?? throw new ArgumentNullException(nameof(originalImage));
+    }
+
+    // For EF
+    private PostImage()
+    {
+        
+    }
     
-    public ImageInfo ProcessedImage { get; init; }
+    public int PostId { get; }
     
-    public ImageInfo OriginalImage { get; init; }
+    public ImageInfo ProcessedImage { get; }
+    
+    public ImageInfo OriginalImage { get; }
 }

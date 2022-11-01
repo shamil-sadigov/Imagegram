@@ -2,15 +2,15 @@ namespace Imagegram.Features.Posts.GetPaginated;
 
 public sealed class PostCursor
 {
-    public int NumberOfComments { get; }
+    public int CommentCount { get; }
     public long Timestamp { get; }
     public int PostId { get; }
 
-    public PostCursor(int postId, int numberOfComments, long timestamp)
+    public PostCursor(int postId, int commentCount, long timestamp)
     {
-        if (numberOfComments < 1)
+        if (commentCount < 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(numberOfComments), "Should be greater than 0");
+            throw new ArgumentOutOfRangeException(nameof(commentCount), "Should not be less than 0");
         }
         
         if (timestamp < 1)
@@ -23,7 +23,7 @@ public sealed class PostCursor
             throw new ArgumentOutOfRangeException(nameof(timestamp), "Should be greater than 0");
         }
 
-        NumberOfComments = numberOfComments;
+        CommentCount = commentCount;
         Timestamp = timestamp;
         PostId = postId;
     }
@@ -50,10 +50,16 @@ public sealed class PostCursor
         cursor =  new PostCursor(postId, numberOfComments, timestamp);
         return true;
     }
+
+    public static PostCursor FromPost(PostDto post)
+    {
+        return new PostCursor(post.Id, post.CommentCount, post.LastTimeUpdatedAt.UtcTicks);
+    }
+    
     
     public string ToBase64()
     {
-        return $"{PostId}:{NumberOfComments}:{Timestamp}".ConvertToBase64();
+        return $"{PostId}:{CommentCount}:{Timestamp}".ConvertToBase64();
     }
     
 }

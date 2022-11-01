@@ -1,7 +1,7 @@
 ﻿using Imagegram.Database;
 using Imagegram.Database.Models;
 
-namespace Imagegram.Tests;
+namespace Imagegram.Tests.ApplicationDbContextTests;
 
 public static class ApplicationDbContextExtensions
 {

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using MediatR;
 
 namespace Imagegram.Features.Posts.Create;
@@ -9,12 +8,10 @@ public record CreatePostCommand(int UserId, string Description, IFormFile Image)
 public record CreatedPost(long PostId);
 
 
-
-
 //
 // public sealed class CreatePostCommand:IRequest<CreatedPost>, IValidatableObject
 // {
-//     public int UserId { get; set; }
+//     public int CommentedBy { get; set; }
 //     public string Description { get; set; }
 //     public IFormFile Image { get; set; }
 //     
