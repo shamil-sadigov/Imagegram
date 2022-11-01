@@ -1,0 +1,22 @@
+[
+  {
+    "Email": "hamingway@gmail.com",
+    "Password": "pass@#"
+  },
+  {
+    "Email": "dostoevsky@gmail.com",
+    "Password": "pass@#"
+  },
+  {
+    "Email": "jack.london@gmail.com",
+    "Password": "pass@#"
+  },
+  {
+    "Email": "fitzgerald@gmail.com",
+    "Password": "pass@#"
+  },
+  {
+    "Email": "franz.kafka@gmail.com",
+    "Password": "pass@#"
+  }
+]
