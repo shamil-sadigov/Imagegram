@@ -1,4 +1,6 @@
-﻿namespace Imagegram.Features.Posts.GetPaginated;
+﻿using Imagegram.Features.Posts.GetPaginated.Pagination;
+
+namespace Imagegram.Features.Posts.GetPaginated;
 
 public static class CollectionExtensions
 {

@@ -1,4 +1,5 @@
 ﻿using Imagegram.Database;
+using Imagegram.Features.Posts.GetPaginated.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
@@ -6,11 +7,11 @@ namespace Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
 /// <summary>
 /// Creates pagination for first page
 /// </summary>
-public class FirstPagePaginationStrategy:BasePaginationStrategy
+public class FirstPagePostPaginationStrategy:BasePostPaginationStrategy
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public FirstPagePaginationStrategy(ApplicationDbContext dbContext)
+    public FirstPagePostPaginationStrategy(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }

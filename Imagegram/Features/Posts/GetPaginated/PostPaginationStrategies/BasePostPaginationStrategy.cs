@@ -1,8 +1,9 @@
 ﻿using Imagegram.Database.Models;
+using Imagegram.Features.Posts.GetPaginated.Pagination;
 
 namespace Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
 
-public abstract class BasePaginationStrategy:IPaginationStrategy<PostDto, PostCursor>
+public abstract class BasePostPaginationStrategy:IPaginationStrategy<PostDto, PostCursor>
 {
     // TODO: What will it return if there is not comments
     // TODO: It may load all comments in memory ?

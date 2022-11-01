@@ -1,10 +1,14 @@
-﻿namespace Imagegram.Features.Posts.GetPaginated;
+﻿using Imagegram.Features.Posts;
+
+namespace Imagegram.Features;
 
 public record PostDto
-(int Id,
+(
+    int Id,
     int CommentCount,
     DateTimeOffset LastTimeUpdatedAt,
     DateTimeOffset CreatedAt,
     string Description,
     string ImageUrl,
-    IEnumerable<CommentDto> Comments) : IHasId;
+    IEnumerable<CommentDto> Comments
+);

@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Imagegram.Features.Posts.GetPaginated;
+namespace Imagegram.Features;
 
 public static class StringExtensions
 {

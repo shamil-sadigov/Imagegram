@@ -1,4 +1,4 @@
-namespace Imagegram.Features.Posts.GetPaginated;
+namespace Imagegram.Features.Posts.GetPaginated.Pagination;
 
 public sealed class PostCursor
 {

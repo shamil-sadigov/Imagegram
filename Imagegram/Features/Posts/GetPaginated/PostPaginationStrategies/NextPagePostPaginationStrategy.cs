@@ -1,4 +1,5 @@
 ﻿using Imagegram.Database;
+using Imagegram.Features.Posts.GetPaginated.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
@@ -6,15 +7,15 @@ namespace Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
 /// <summary>
 /// Creates pagination for first page
 /// </summary>
-public class PreviousPagePaginationStrategy:BasePaginationStrategy
+public class NextPagePostPaginationStrategy:BasePostPaginationStrategy
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public PreviousPagePaginationStrategy(ApplicationDbContext dbContext)
+    public NextPagePostPaginationStrategy(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-
+    
     public override async Task<PaginatedResult<PostDto, PostCursor>> PaginateAsync(PageSize pageSize, PostCursor? cursor)
     {
         var prefetchCount = pageSize + 1;
@@ -26,31 +27,25 @@ public class PreviousPagePaginationStrategy:BasePaginationStrategy
 
         DateTimeOffset lastUpdatedTime = new DateTimeOffset(cursor.Timestamp, TimeSpan.Zero);
         
-        var posts = await  _dbContext.Posts
-            .OrderBy(post => post.CommentCount)
-            .ThenBy(post => post.LastTimeUpdatedAt)
-            .ThenBy(post => post.Id)
+        var result = await _dbContext.Posts
+            .OrderByDescending(post => post.CommentCount)
+            .ThenByDescending(post => post.LastTimeUpdatedAt)
+            .ThenByDescending(post => post.Id)
 
-            // TODO: Change this comment
             // If there are posts with the same 'CommentCount' and same 'LastTimeUpdatedAt' 
             // then return only those which Id < cursor.PostId
             // because posts with Id >= cursor.PostId were already served in previous page
 
             .Where(post =>
-                post.CommentCount > cursor.CommentCount
+                post.CommentCount < cursor.CommentCount
                 || post.CommentCount == cursor.CommentCount 
-                && (post.LastTimeUpdatedAt > lastUpdatedTime 
-                    || (post.LastTimeUpdatedAt == lastUpdatedTime && post.Id > cursor.PostId)))
+                && (post.LastTimeUpdatedAt < lastUpdatedTime 
+                    || (post.LastTimeUpdatedAt == lastUpdatedTime && post.Id < cursor.PostId)))
             .Take(prefetchCount)
             .Select(post => ProjectToDto(post))
-            .ToArrayAsync();
+            .ToListAsync();
         
-        var ordered =  posts.OrderByDescending(x => x.CommentCount)
-            .ThenByDescending(x => x.LastTimeUpdatedAt)
-            .ThenByDescending(x => x.Id)
-            .ToList();
-
-        return Paginate(pageSize, ordered, prefetchCount);
+        return Paginate(pageSize, result, prefetchCount);
     }
     
     private static PaginatedResult<PostDto, PostCursor> Paginate(int pageSize, List<PostDto> posts, int prefetchCount)
@@ -59,11 +54,12 @@ public class PreviousPagePaginationStrategy:BasePaginationStrategy
 
         if (hasMoreItems)
         {
-            // Remove first item, because it was extra data fetched from DB
+            // Remove last item, because it was extra data fetched from DB
             // to figure out if there are more data or not
-            posts.RemoveAt(0);
+            posts.RemoveAt(posts.Count - 1);
         }
 
         return posts.ToPaginatedResult(pageSize, hasMoreItems);
     }
+    
 }
