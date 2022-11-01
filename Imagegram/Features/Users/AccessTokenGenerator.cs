@@ -7,7 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 namespace Imagegram.Features.Users;
 
 // TODO: Register in IoC
-public class AccessTokenGenerator
+
+public sealed class AccessTokenGenerator : IAccessTokenGenerator
 {
     private readonly AccessTokenOptions _accessTokenOptions;
 

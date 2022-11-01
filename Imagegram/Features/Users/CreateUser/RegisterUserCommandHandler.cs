@@ -24,17 +24,17 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
 
         // TODO: Abstract from time
 
-        var newuUser = new User()
+        var newUser = new User()
         {
             Email = request.Email,
             Password = protectedPassword,
             CreatedAt = DateTimeOffset.UtcNow
         };
         
-        await _dbContext.Users.AddAsync(newuUser, cancellationToken);
+        await _dbContext.Users.AddAsync(newUser, cancellationToken);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new RegisteredUser(newuUser.Id, newuUser.Email);
+        return new RegisteredUser(newUser.Id, newUser.Email);
     }
 }

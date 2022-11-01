@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.DataProtection;
 
 namespace Imagegram.Features.Users;
 
-// TODO: Register in IoC
 
-public class PasswordManager : IPasswordManager
+public sealed class PasswordManager : IPasswordManager
 {
     private readonly IDataProtectionProvider _dataProtectionProvider;
 

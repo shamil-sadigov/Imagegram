@@ -8,12 +8,12 @@ public class GetUserAccessTokenQueryHandler : IRequestHandler<GetUserAccessToken
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IPasswordManager _passwordManager;
-    private readonly AccessTokenGenerator _accessTokenGenerator;
+    private readonly IAccessTokenGenerator _accessTokenGenerator;
 
     public GetUserAccessTokenQueryHandler(
         ApplicationDbContext dbContext,
         IPasswordManager passwordManager,
-        AccessTokenGenerator accessTokenGenerator)
+        IAccessTokenGenerator accessTokenGenerator)
     {
         _dbContext = dbContext;
         _passwordManager = passwordManager;

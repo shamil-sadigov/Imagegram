@@ -1,8 +1,11 @@
 using Azure.Storage.Blobs;
+using Imagegram.Database;
 using Imagegram.Features.Posts.Create;
+using Imagegram.Features.Users;
 using Imagegram.Features.Users.GetUserAccessToken;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 // TODO: Move to config
@@ -13,26 +16,35 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddMediatR(typeof(Program));
-
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<ImageProcessor>();
-
-builder.Services.AddSingleton(new BlobServiceClient(blobStorageConnectionString));
-
 var accessTokenOptionsSection = builder.Configuration.GetSection("AccessTokenOptions");
-
 var accessTokenOptions = accessTokenOptionsSection.Get<AccessTokenOptions>();
-
 accessTokenOptions.ThrowIfNotValid();
 
-builder.Services.Configure<AccessTokenOptions>(accessTokenOptionsSection);
+var connectionString = builder.Configuration.GetConnectionString("Default");
 
-builder.Services.AddAuthentication(ops =>
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("Connection string is not provided in config file");
+}
+
+builder.Services
+    .AddMediatR(typeof(Program))
+    .AddControllers()
+    .Services
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
+    .Configure<AccessTokenOptions>(accessTokenOptionsSection)
+    .AddSingleton(new BlobServiceClient(blobStorageConnectionString))
+    .AddSingleton<ImageProcessor>()
+    .AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>()
+    .AddSingleton<IPasswordManager, PasswordManager>()
+    .AddDataProtection()
+    .Services
+    .AddDbContext<ApplicationDbContext>(ops =>
+    {
+        ops.UseSqlServer(connectionString);
+    })
+    .AddAuthentication(ops =>
     {
         ops.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         ops.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
