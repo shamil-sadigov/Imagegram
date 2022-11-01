@@ -15,14 +15,32 @@ public class FirstPagePaginationStrategy:BasePaginationStrategy
         _dbContext = dbContext;
     }
     
-    protected override Task<List<PostDto>> RetrievePostDtosAsync(int count, PostCursor? cursor)
+    public override async Task<PaginatedResult<PostDto, PostCursor>> PaginateAsync(PageSize pageSize, PostCursor? cursor)
     {
-        return  _dbContext.Posts
+        var prefetchCount = pageSize + 1;
+        
+        var result = await _dbContext.Posts
             .OrderByDescending(post => post.CommentCount)
-                .ThenByDescending(post => post.LastTimeUpdatedAt)
-                    .ThenByDescending(post => post.Id)
-            .Take(count)
+            .ThenByDescending(post => post.LastTimeUpdatedAt)
+            .ThenByDescending(post => post.Id)
+            .Take(prefetchCount)
             .Select(post => ProjectToDto(post))
             .ToListAsync();
+        
+        return Paginate(pageSize, result, prefetchCount);
+    }
+    
+    private static PaginatedResult<PostDto, PostCursor> Paginate(int pageSize, List<PostDto> posts, int prefetchCount)
+    {
+        var hasMoreItems = posts.Count == prefetchCount;
+
+        if (hasMoreItems)
+        {
+            // Remove last item, because it was extra data fetched from DB
+            // to figure out if there are more data or not
+            posts.RemoveAt(posts.Count - 1);
+        }
+
+        return posts.ToPaginatedResult(pageSize, hasMoreItems);
     }
 }
