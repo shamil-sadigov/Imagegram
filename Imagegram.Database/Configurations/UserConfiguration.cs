@@ -12,9 +12,12 @@ public class UserConfiguration:IEntityTypeConfiguration<User>
         entity.HasKey(x => x.Id);
             
         entity.Property(x => x.Password)
-            .HasMaxLength(256);
+            .HasMaxLength(2048);
             
         entity.Property(x => x.Email)
-            .HasMaxLength(256);
+            .HasMaxLength(320);
+
+        entity.HasIndex(x => x.Email)
+            .IsUnique();
     }
 }

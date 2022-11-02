@@ -22,7 +22,6 @@ public class PostConfiguration:IEntityTypeConfiguration<Post>
         entity.HasOne<User>()
             .WithMany()
             .HasForeignKey(x => x.CreatedBy);
-        // .OnDelete(DeleteBehavior.Restrict);
             
         entity.HasMany(x=> x.Comments)
             .WithOne()
@@ -39,5 +38,7 @@ public class PostConfiguration:IEntityTypeConfiguration<Post>
         entity.Property(x => x.RowVersion)
             .IsRowVersion()
             .IsConcurrencyToken();
+
+        entity.HasIndex(x => new { x.CommentCount, x.LastTimeUpdatedAt });
     }
 }
