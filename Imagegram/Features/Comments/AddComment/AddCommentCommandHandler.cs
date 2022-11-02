@@ -9,10 +9,12 @@ namespace Imagegram.Features.Comments.AddComment;
 public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, AddedComment>
 {
     private readonly ApplicationDbContext _db;
+    private readonly ISystemTime _systemTime;
 
-    public AddCommentCommandHandler(ApplicationDbContext db)
+    public AddCommentCommandHandler(ApplicationDbContext db, ISystemTime systemTime)
     {
         _db = db;
+        _systemTime = systemTime;
     }
     
     public async Task<AddedComment> Handle(AddCommentCommand request, CancellationToken cancellationToken)
@@ -23,7 +25,7 @@ public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, Added
         {
             var post = await FindPostAsync(request, cancellationToken);
             
-            addedComment = post.AddComment(request.CommentText, request.CommentedBy, DateTimeOffset.UtcNow);
+            addedComment = post.AddComment(request.CommentText, request.CommentedBy, _systemTime.CurrentUtc);
 
             await _db.SaveChangesAsync(cancellationToken);
             

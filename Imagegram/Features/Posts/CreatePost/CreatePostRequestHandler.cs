@@ -5,23 +5,28 @@ using MediatR;
 
 namespace Imagegram.Features.Posts.CreatePost;
 
+// TODO: Add logging everywhere
+
 public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, CreatedPost>
 {
     private readonly ImageProcessor _imageProcessor;
     private readonly IImageStorage _imageStorage;
     private readonly ApplicationDbContext _dbContext;
     private readonly ILogger<CreatePostRequestHandler> _logger;
+    private readonly ISystemTime _systemTime;
     
     public CreatePostRequestHandler(
         ILogger<CreatePostRequestHandler> logger, 
         ImageProcessor imageProcessor,
         IImageStorage imageStorage,
-        ApplicationDbContext dbContext)
+        ApplicationDbContext dbContext, 
+        ISystemTime systemTime)
     {
         _logger = logger;
         _imageProcessor = imageProcessor;
         _imageStorage = imageStorage;
         _dbContext = dbContext;
+        _systemTime = systemTime;
 
         // TODO: We need to ensure that before deployment blob containers exists
     }
@@ -70,7 +75,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, Creat
             command.Description, 
             new ImageInfo(originalImage.Name, originalImage.Uri),
             new ImageInfo(processedImage.Name, processedImage.Uri), 
-            DateTimeOffset.UtcNow);
+            _systemTime.CurrentUtc);
         
         await _dbContext.Posts.AddAsync(post, cancellationToken);
         return post;

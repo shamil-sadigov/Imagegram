@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Features;
 
+// TODO: Add logging and extract to DbContext itself
 public static class DbContextExtensions
 {
     public static async Task InTransactionAsync(this ApplicationDbContext dbContext,
@@ -12,7 +13,7 @@ public static class DbContextExtensions
         CancellationToken cancellationToken)
     {
         await using var transaction = await dbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
-
+        
         try
         {
             await dbOperation();

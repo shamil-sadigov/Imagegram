@@ -3,8 +3,6 @@ using Azure.Storage.Blobs.Models;
 
 namespace Imagegram.Features.Posts.CreatePost.Services;
 
-// TODO: Extract an interface
-
 public sealed class ImageStorage : IImageStorage
 {
     private readonly BlobServiceClient _blobServiceClient;

@@ -43,6 +43,7 @@ builder.Services
     .AddSingleton<ImageProcessor>()
     .AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>()
     .AddSingleton<IPasswordManager, PasswordManager>()
+    .AddSingleton<ISystemTime, DefaultSystemTime>()
     .AddDataProtection()
     .Services
     .AddDbContext<ApplicationDbContext>(ops =>

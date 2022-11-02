@@ -9,8 +9,13 @@ namespace Imagegram.Features.Comments.DeleteComment;
 public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand, CommentRemoved>
 {
     private readonly ApplicationDbContext _db;
-
-    public DeleteCommentCommandHandler(ApplicationDbContext db) => _db = db;
+    private readonly ISystemTime _systemTime;
+    
+    public DeleteCommentCommandHandler(ApplicationDbContext db, ISystemTime systemTime)
+    {
+        _db = db;
+        _systemTime = systemTime;
+    }
 
     public async Task<CommentRemoved> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
     {
@@ -18,7 +23,7 @@ public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand,
         {
             var post = await FindPostAsync(request, cancellationToken);
 
-            post.RemoveComment(request.CommentId, DateTimeOffset.UtcNow);
+            post.RemoveComment(request.CommentId, _systemTime.CurrentUtc);
 
             await _db.SaveChangesAsync(cancellationToken);
             
@@ -30,7 +35,7 @@ public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand,
     private async Task<Post> FindPostAsync(DeleteCommentCommand request, CancellationToken cancellationToken)
     {
         var post = await _db.Posts
-            .Include(x => x.Comments.Where(x => x.CommentedBy == request.CommentedBy && x.Id == request.CommentId))
+            .Include(x => x.Comments.Where(c => c.Id == request.CommentId && c.CommentedBy == request.CommentedBy))
             .FirstOrDefaultAsync(x => x.Id == request.PostId, cancellationToken: cancellationToken);
         
         if (post is null)

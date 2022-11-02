@@ -7,17 +7,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Features.Users.CreateUser;
 
+
+
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisteredUser>
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IPasswordManager _passwordManager;
-
+    private readonly ISystemTime _systemTime;
     public RegisterUserCommandHandler(
         ApplicationDbContext dbContext,
-        IPasswordManager passwordManager)
+        IPasswordManager passwordManager, 
+        ISystemTime systemTime)
     {
         _dbContext = dbContext;
         _passwordManager = passwordManager;
+        _systemTime = systemTime;
     }
     
     public async Task<RegisteredUser> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -25,14 +29,12 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         await EnsureEmailIsUniqueAsync(request, cancellationToken);
         
         var protectedPassword = _passwordManager.ProtectUserPassword(request.Email, request.Password);
-
-        // TODO: Abstract from time
-
+        
         var newUser = new User()
         {
             Email = request.Email,
             Password = protectedPassword,
-            CreatedAt = DateTimeOffset.UtcNow
+            CreatedAt = _systemTime.CurrentUtc
         };
         
         await _dbContext.Users.AddAsync(newUser, cancellationToken);
@@ -46,7 +48,6 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
     {
         if (await _dbContext.Users.AnyAsync(x => x.Email == request.Email, cancellationToken))
         {
-            // TODO: Map it to 409
             throw new DuplicateEmailException(request.Email);
         }
     }
