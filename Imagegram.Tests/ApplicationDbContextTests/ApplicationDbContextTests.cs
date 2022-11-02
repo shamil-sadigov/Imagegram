@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Tests.ApplicationDbContextTests;
 
-// TODO: Test that post is saved correctly
 
 // [CollectionDefinition("Non-parallel-tests", DisableParallelization = true)]
 public class ApplicationDbContextTests : IDisposable

@@ -37,10 +37,7 @@ public class DatabaseSeeder
         db.Users.AddRange(newUsers);
 
         await db.SaveChangesAsync();
-
-
-        // TODO Continue from here
-
+        
         var posts = postDtos!.Select(dto =>
         {
             var post = new Post

@@ -14,8 +14,6 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
-
-    // TODO: Add indexes
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
