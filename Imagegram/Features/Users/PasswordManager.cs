@@ -22,7 +22,7 @@ public sealed class PasswordManager : IPasswordManager
         return userRawPassword == rawPassword;
     }
     
-    /// <returns>protected rawPassword</returns>
+    /// <returns>protected <see cref="rawPassword"/></returns>
     public string ProtectUserPassword(string userEmail, string rawPassword)
     {
         // Just a lightweight protection

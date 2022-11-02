@@ -5,16 +5,19 @@ namespace Imagegram.Features.Posts.CreatePost.Services;
 
 public sealed class ImageStorage : IImageStorage
 {
+    public const string OriginalImagesContainerName = "original-images";
+    public const string ProcessedImagesContainerName = "processed-images";
+    
     private readonly BlobServiceClient _blobServiceClient;
 
     public ImageStorage(BlobServiceClient blobServiceClient) 
         => _blobServiceClient = blobServiceClient;
 
     public Task<SavedImage> SaveOriginalImageAsync(string imageName, Stream stream, CancellationToken token) 
-        => SaveImageToContainerAsync(imageName, stream, "original-images", token);
+        => SaveImageToContainerAsync(imageName, stream, OriginalImagesContainerName, token);
 
     public Task<SavedImage> SaveProcessedImageAsync(string imageName, Stream stream, CancellationToken token) 
-        => SaveImageToContainerAsync(imageName, stream, "processed-images", token);
+        => SaveImageToContainerAsync(imageName, stream, ProcessedImagesContainerName, token);
 
     private async Task<SavedImage> SaveImageToContainerAsync(
         string imageName, 
