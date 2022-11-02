@@ -1,4 +1,4 @@
-using Imagegram.Database.Models;
+using Imagegram.Database.Entities;
 
 namespace Imagegram.Features.Users;
 

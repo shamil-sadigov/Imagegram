@@ -1,4 +1,4 @@
-﻿using Imagegram.Database.Models;
+﻿using Imagegram.Database.Entities;
 using Microsoft.AspNetCore.DataProtection;
 
 namespace Imagegram.Features.Users;

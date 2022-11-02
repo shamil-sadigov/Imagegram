@@ -1,12 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Imagegram.Database.Models;
+using Imagegram.Database.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Imagegram.Features.Users;
-
-// TODO: Register in IoC
+namespace Imagegram.Features.Users.GetUserAccessToken.Services;
 
 public sealed class AccessTokenGenerator : IAccessTokenGenerator
 {

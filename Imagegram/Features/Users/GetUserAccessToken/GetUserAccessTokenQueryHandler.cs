@@ -1,4 +1,5 @@
 using Imagegram.Database;
+using Imagegram.Features.Users.GetUserAccessToken.Services;
 using MediatR;
 
 namespace Imagegram.Features.Users.GetUserAccessToken;
