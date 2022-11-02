@@ -5,7 +5,7 @@ using MediatR;
 namespace Imagegram.Features.Users.GetUserAccessToken;
 
 
-public class GetUserAccessTokenQueryHandler : IRequestHandler<GetUserAccessTokenQuery, UserAccessToken>
+public class GetUserAccessTokenQueryHandler : IRequestHandler<CreateUserAccessTokenCommand, UserAccessToken>
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IPasswordManager _passwordManager;
@@ -21,7 +21,7 @@ public class GetUserAccessTokenQueryHandler : IRequestHandler<GetUserAccessToken
         _accessTokenGenerator = accessTokenGenerator;
     }
     
-    public Task<UserAccessToken> Handle(GetUserAccessTokenQuery request, CancellationToken cancellationToken)
+    public Task<UserAccessToken> Handle(CreateUserAccessTokenCommand request, CancellationToken cancellationToken)
     {
         var user = _dbContext.Users.FirstOrDefault(x=> x.Email == request.Email);
 

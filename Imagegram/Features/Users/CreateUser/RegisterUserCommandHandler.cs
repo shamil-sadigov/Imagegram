@@ -1,7 +1,5 @@
-using System.Data;
 using Imagegram.Database;
 using Imagegram.Database.Entities;
-using Imagegram.Features.Users.GetUserAccessToken;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
