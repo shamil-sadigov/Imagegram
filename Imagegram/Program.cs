@@ -29,10 +29,15 @@ if (string.IsNullOrWhiteSpace(connectionString))
 
 builder.Services
     .AddMediatR(typeof(Program))
-    .AddControllers()
+    .AddControllers(x=> x.Filters.Add<ExceptionFilter>())
     .Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
+    .AddExceptionToHttpStatusCodeMapping(x =>
+    {
+        x.Map<EntityNotFoundException>(HttpStatusCode.NotFound);
+        x.Map<DuplicateEmailException>(HttpStatusCode.Conflict);
+    })
     .Configure<AccessTokenOptions>(accessTokenOptionsSection)
     .AddSingleton(new BlobServiceClient(blobStorageConnectionString))
     .AddSingleton<ImageProcessor>()
