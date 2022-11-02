@@ -7,7 +7,7 @@ namespace Imagegram.Features.Posts.CreatePost;
 
 // TODO: Add logging everywhere
 
-public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, CreatedPost>
+public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, PostDto>
 {
     private readonly ImageProcessor _imageProcessor;
     private readonly IImageStorage _imageStorage;
@@ -31,7 +31,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, Creat
         // TODO: We need to ensure that before deployment blob containers exists
     }
     
-    public async Task<CreatedPost> Handle(CreatePostCommand request, CancellationToken cancellationToken)
+    public async Task<PostDto> Handle(CreatePostCommand request, CancellationToken cancellationToken)
     {
         Stream originalImageStream = request.Image.OpenReadStream();
         await using Stream processedImageStream = _imageProcessor.ProcessImage(originalImageStream);
@@ -46,9 +46,9 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, Creat
         
         var post = await CreatePostAsync(request, originalImage, processedImage, cancellationToken);
 
-        return new CreatedPost(post.Id);
+        return MapToDto(post);
     }
-
+    
     /// <summary>
     /// Lightweight protection to ensure that DB is available, so that when we save image in BlobStorage
     /// we are able to save uri of that image in DB.
@@ -78,6 +78,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, Creat
             _systemTime.CurrentUtc);
         
         await _dbContext.Posts.AddAsync(post, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return post;
     }
 
@@ -99,5 +100,18 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, Creat
         );
         
         return (savingOriginalImage.Result, savingProcessedImage.Result);
+    }
+    
+    private static PostDto MapToDto(Post post)
+    {
+        return new PostDto(
+            post.Id,
+            post.CreatedBy,
+            post.CommentCount,
+            post.LastTimeUpdatedAt,
+            post.CreatedAt,
+            post.Description,
+            post.Image.ProcessedImage.Uri,
+            null);
     }
 }

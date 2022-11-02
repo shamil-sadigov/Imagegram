@@ -48,7 +48,7 @@ public class PreviousPagePaginationStrategy:BasePaginationStrategy
         
         var ordered =  posts.OrderByDescending(x => x.CommentCount)
             .ThenByDescending(x => x.LastTimeUpdatedAt)
-            .ThenByDescending(x => x.Id)
+            .ThenByDescending(x => x.PostId)
             .ToList();
 
         return Paginate(pageSize, ordered, prefetchCount);

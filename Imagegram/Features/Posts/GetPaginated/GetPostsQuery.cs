@@ -3,14 +3,12 @@ using MediatR;
 
 namespace Imagegram.Features.Posts.GetPaginated;
 
-public sealed record GetPostsQuery(PageSize PageSize, PostCursor? StartCursor, PostCursor? EndCursor)
-    : IRequest<GetPostsQueryResult>
+public sealed record GetPostsQuery(PageSize PageSize, PostCursor? BeforeCursor, PostCursor? AfterCursor)
+    : IRequest<PaginatedResult<PostDto, PostCursor>>
 {
-    public bool IsFirstPageRequested => StartCursor is null && EndCursor is null;
+    public bool IsFirstPageRequested => BeforeCursor is null && AfterCursor is null;
     
-    public bool IsNextPageRequested => EndCursor is not null;
+    public bool IsNextPageRequested => AfterCursor is not null;
     
-    public bool IsPreviousPageRequested => StartCursor is not null;
+    public bool IsPreviousPageRequested => BeforeCursor is not null;
 }
-
-public sealed record GetPostsQueryResult(PaginatedResult<PostDto, PostCursor> Posts);

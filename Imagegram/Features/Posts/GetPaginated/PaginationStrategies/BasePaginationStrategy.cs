@@ -5,18 +5,19 @@ namespace Imagegram.Features.Posts.GetPaginated.PaginationStrategies;
 
 public abstract class BasePaginationStrategy:IPaginationStrategy<PostDto, PostCursor>
 {
-    protected static PostDto ProjectToDto(Post x) =>
+    protected static PostDto ProjectToDto(Post post) =>
         new
         (
-            x.Id,
-            x.CommentCount, 
-            x.LastTimeUpdatedAt, 
-            x.CreatedAt, 
-            x.Description, 
-            x.Image.ProcessedImage.Uri, 
-            x.CommentCount < 1
-                ? Enumerable.Empty<CommentDto>()
-                : x.Comments!.OrderByDescending(c => c.CreatedAt)
+            post.Id,
+            post.CreatedBy,
+            post.CommentCount, 
+            post.LastTimeUpdatedAt, 
+            post.CreatedAt, 
+            post.Description, 
+            post.Image.ProcessedImage.Uri, 
+            post.CommentCount < 1
+                ? null
+                : post.Comments!.OrderByDescending(c => c.CreatedAt)
                     .Take(2)
                     .Select(c => new CommentDto(c.Id, c.Text, c.CommentedBy)));
 

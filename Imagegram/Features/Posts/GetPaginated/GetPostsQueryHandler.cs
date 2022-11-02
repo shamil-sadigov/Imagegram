@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Imagegram.Features.Posts.GetPaginated;
 
-public class GetPostsQueryHandler : IRequestHandler<GetPostsQuery, GetPostsQueryResult>
+public class GetPostsQueryHandler : IRequestHandler<GetPostsQuery, PaginatedResult<PostDto, PostCursor>>
 {
     private readonly ApplicationDbContext _dbContext;
     
@@ -14,7 +14,7 @@ public class GetPostsQueryHandler : IRequestHandler<GetPostsQuery, GetPostsQuery
         _dbContext = dbContext;
     }
     
-    public async Task<GetPostsQueryResult> Handle(GetPostsQuery query, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<PostDto, PostCursor>> Handle(GetPostsQuery query, CancellationToken cancellationToken)
     {
         PaginatedResult<PostDto, PostCursor> paginatedResult = query switch
         {
@@ -22,14 +22,14 @@ public class GetPostsQueryHandler : IRequestHandler<GetPostsQuery, GetPostsQuery
                 => await new FirstPagePaginationStrategy(_dbContext).PaginateAsync(query.PageSize, null),
             
             { IsNextPageRequested: true } 
-                 => await new NextPagePaginationStrategy(_dbContext).PaginateAsync(query.PageSize, query.EndCursor),
+                 => await new NextPagePaginationStrategy(_dbContext).PaginateAsync(query.PageSize, query.AfterCursor),
             
             { IsPreviousPageRequested: true } 
-                => await new PreviousPagePaginationStrategy(_dbContext).PaginateAsync(query.PageSize, query.StartCursor),
+                => await new PreviousPagePaginationStrategy(_dbContext).PaginateAsync(query.PageSize, query.BeforeCursor),
 
             _ => throw new InvalidOperationException($"Unexpected query {query}")
         };
 
-        return new GetPostsQueryResult(paginatedResult);
+        return paginatedResult;
     }
 }

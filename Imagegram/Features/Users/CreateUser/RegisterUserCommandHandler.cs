@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Features.Users.CreateUser;
 
-
-
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisteredUser>
 {
     private readonly ApplicationDbContext _dbContext;
