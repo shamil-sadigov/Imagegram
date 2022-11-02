@@ -1,8 +1,8 @@
 using System.Data;
 using Imagegram.Database;
 using Imagegram.Database.Entities;
+using Imagegram.Extensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Features.Comments.AddComment;
 
@@ -23,7 +23,7 @@ public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, Added
         
         await _db.InTransactionAsync(IsolationLevel.RepeatableRead, async () =>
         {
-            var post = await FindPostAsync(request, cancellationToken);
+            var post = await _db.Posts.FindOrThrowAsync(request.PostId, cancellationToken);
             
             addedComment = post.AddComment(request.CommentText, request.CommentedBy, _systemTime.CurrentUtc);
 
@@ -32,17 +32,5 @@ public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, Added
         }, cancellationToken);
         
         return new AddedComment(addedComment!.Id, addedComment.PostId, addedComment.CommentedBy);
-    }
-
-    private async Task<Post> FindPostAsync(AddCommentCommand request, CancellationToken cancellationToken)
-    {
-        var post = await _db.Posts.FirstOrDefaultAsync(x => x.Id == request.PostId, cancellationToken);
-        
-        if (post is null)
-        {
-            throw new EntityNotFoundException($"Post {request.PostId} was not found");
-        }
-        
-        return post;
     }
 }

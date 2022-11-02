@@ -1,8 +1,11 @@
 ﻿using System.Data;
 using Imagegram.Database;
+using Imagegram.Database.Entities;
+using Imagegram.Features;
 using Microsoft.EntityFrameworkCore;
 
-namespace Imagegram.Features;
+namespace Imagegram.Extensions;
+
 
 // TODO: Add logging and extract to DbContext itself
 public static class DbContextExtensions
@@ -25,6 +28,22 @@ public static class DbContextExtensions
             await transaction.RollbackAsync(cancellationToken);
             throw;
         }
+    }
+    
+    public static async Task<TBaseEntity> FindOrThrowAsync<TBaseEntity>(
+        this IQueryable<TBaseEntity> dbSet,
+        int postId,
+        CancellationToken token)
+        where TBaseEntity: BaseEntity
+    {
+        var entity = await dbSet.FirstOrDefaultAsync(x => x.Id == postId, token);
+        
+        if (entity is null)
+        {
+            throw new EntityNotFoundException($"{typeof(TBaseEntity).Name} was not found by Id '{postId}'");
+        }
+
+        return entity;
     }
     
 }
