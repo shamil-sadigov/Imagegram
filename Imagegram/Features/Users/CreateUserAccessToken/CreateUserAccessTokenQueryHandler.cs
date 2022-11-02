@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Features.Users.CreateUserAccessToken;
 
-public class GetUserAccessTokenQueryHandler : IRequestHandler<CreateUserAccessTokenCommand, UserAccessToken>
+public class CreateUserAccessTokenQueryHandler : IRequestHandler<CreateUserAccessTokenCommand, UserAccessToken>
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IPasswordManager _passwordManager;
     private readonly IAccessTokenGenerator _accessTokenGenerator;
 
-    public GetUserAccessTokenQueryHandler(
+    public CreateUserAccessTokenQueryHandler(
         ApplicationDbContext dbContext,
         IPasswordManager passwordManager,
         IAccessTokenGenerator accessTokenGenerator)
