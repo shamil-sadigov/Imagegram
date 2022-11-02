@@ -1,6 +1,6 @@
 using Imagegram.Features.Posts.GetPaginated.Pagination;
 
-namespace Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
+namespace Imagegram.Features.Posts.GetPaginated.PaginationStrategies;
 
 public interface IPaginationStrategy<TEntity, TCursor>
 {

@@ -1,6 +1,6 @@
 using Imagegram.Database;
 using Imagegram.Features.Posts.GetPaginated.Pagination;
-using Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
+using Imagegram.Features.Posts.GetPaginated.PaginationStrategies;
 using MediatR;
 
 namespace Imagegram.Features.Posts.GetPaginated;
@@ -19,13 +19,13 @@ public class GetPostsQueryHandler : IRequestHandler<GetPostsQuery, GetPostsQuery
         PaginatedResult<PostDto, PostCursor> paginatedResult = query switch
         {
             { IsFirstPageRequested: true } 
-                => await new FirstPagePostPaginationStrategy(_dbContext).PaginateAsync(query.PageSize, null),
+                => await new FirstPagePaginationStrategy(_dbContext).PaginateAsync(query.PageSize, null),
             
             { IsNextPageRequested: true } 
-                 => await new NextPagePostPaginationStrategy(_dbContext).PaginateAsync(query.PageSize, query.EndCursor),
+                 => await new NextPagePaginationStrategy(_dbContext).PaginateAsync(query.PageSize, query.EndCursor),
             
             { IsPreviousPageRequested: true } 
-                => await new PreviousPagePostPaginationStrategy(_dbContext).PaginateAsync(query.PageSize, query.StartCursor),
+                => await new PreviousPagePaginationStrategy(_dbContext).PaginateAsync(query.PageSize, query.StartCursor),
 
             _ => throw new InvalidOperationException($"Unexpected query {query}")
         };

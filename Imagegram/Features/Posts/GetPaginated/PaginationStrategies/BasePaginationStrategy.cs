@@ -1,13 +1,10 @@
 ﻿using Imagegram.Database.Entities;
 using Imagegram.Features.Posts.GetPaginated.Pagination;
 
-namespace Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
+namespace Imagegram.Features.Posts.GetPaginated.PaginationStrategies;
 
-public abstract class BasePostPaginationStrategy:IPaginationStrategy<PostDto, PostCursor>
+public abstract class BasePaginationStrategy:IPaginationStrategy<PostDto, PostCursor>
 {
-    // TODO: What will it return if there is not comments
-    // TODO: It may load all comments in memory ?
-    
     protected static PostDto ProjectToDto(Post x) =>
         new
         (
@@ -17,7 +14,7 @@ public abstract class BasePostPaginationStrategy:IPaginationStrategy<PostDto, Po
             x.CreatedAt, 
             x.Description, 
             x.Image.ProcessedImage.Uri, 
-            x.CommentCount < 1 // TODO: Maybe delete it ?
+            x.CommentCount < 1
                 ? Enumerable.Empty<CommentDto>()
                 : x.Comments!.OrderByDescending(c => c.CreatedAt)
                     .Take(2)

@@ -2,7 +2,7 @@
 using Imagegram.Features;
 using Imagegram.Features.Posts.GetPaginated;
 using Imagegram.Features.Posts.GetPaginated.Pagination;
-using Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
+using Imagegram.Features.Posts.GetPaginated.PaginationStrategies;
 using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Tests.PaginationTests;
@@ -53,43 +53,43 @@ public class PaginationTests
         _pageSize = new PageSize(3);
         
         // 1st page
-        var firstPage = await new FirstPagePostPaginationStrategy(new ApplicationDbContext(_dbOptions))
+        var firstPage = await new FirstPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
             .PaginateAsync(pageSize: _pageSize, cursor: null);
 
         AssertFirstPageIsValid(firstPage, and => and.CanNavigateToTheNextPage());
         
         // Go to 2nd page
-        var secondPage = await new NextPagePostPaginationStrategy(new ApplicationDbContext(_dbOptions))
+        var secondPage = await new NextPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
             .PaginateAsync(pageSize: _pageSize, firstPage.EndCursor);
         
         AssertSecondPageIsValid(secondPage);
         
         // Go to 3d page
-        var thirdPage = await new NextPagePostPaginationStrategy(new ApplicationDbContext(_dbOptions))
+        var thirdPage = await new NextPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
             .PaginateAsync(_pageSize, secondPage.EndCursor);
         
         AssertThirdPageIsValid(thirdPage);
         
         // Go to 4th page
-        var forthPage = await new NextPagePostPaginationStrategy(new ApplicationDbContext(_dbOptions))
+        var forthPage = await new NextPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
             .PaginateAsync(_pageSize, thirdPage.EndCursor);
         
         AssertForthPageIsValid(forthPage);
         
         // Go back to 3th page
-        thirdPage = await new PreviousPagePostPaginationStrategy(new ApplicationDbContext(_dbOptions))
+        thirdPage = await new PreviousPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
             .PaginateAsync(_pageSize, forthPage.StartCursor);
         
         AssertThirdPageIsValid(thirdPage);
         
         // Go back to 2nd page
-        secondPage = await new PreviousPagePostPaginationStrategy(new ApplicationDbContext(_dbOptions))
+        secondPage = await new PreviousPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
             .PaginateAsync(_pageSize, thirdPage.StartCursor);
         
         AssertSecondPageIsValid(secondPage);
         
         // Go back to 1st page
-        firstPage = await new PreviousPagePostPaginationStrategy(new ApplicationDbContext(_dbOptions))
+        firstPage = await new PreviousPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
             .PaginateAsync(_pageSize, secondPage.StartCursor);
         
         AssertFirstPageIsValid(firstPage, and => and.CannotNavigateToThePreviousPage());

@@ -2,16 +2,16 @@
 using Imagegram.Features.Posts.GetPaginated.Pagination;
 using Microsoft.EntityFrameworkCore;
 
-namespace Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
+namespace Imagegram.Features.Posts.GetPaginated.PaginationStrategies;
 
 /// <summary>
 /// Creates pagination for first page
 /// </summary>
-public class NextPagePostPaginationStrategy:BasePostPaginationStrategy
+public class FirstPagePaginationStrategy:BasePaginationStrategy
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public NextPagePostPaginationStrategy(ApplicationDbContext dbContext)
+    public FirstPagePaginationStrategy(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -20,27 +20,10 @@ public class NextPagePostPaginationStrategy:BasePostPaginationStrategy
     {
         var prefetchCount = pageSize + 1;
         
-        if (cursor is null)
-        {
-            throw new ArgumentException(nameof(cursor));
-        }
-
-        DateTimeOffset lastUpdatedTime = new DateTimeOffset(cursor.Timestamp, TimeSpan.Zero);
-        
         var result = await _dbContext.Posts
             .OrderByDescending(post => post.CommentCount)
-            .ThenByDescending(post => post.LastTimeUpdatedAt)
-            .ThenByDescending(post => post.Id)
-
-            // If there are posts with the same 'CommentCount' and same 'LastTimeUpdatedAt' 
-            // then return only those which Id < cursor.PostId
-            // because posts with Id >= cursor.PostId were already served in previous page
-
-            .Where(post =>
-                post.CommentCount < cursor.CommentCount
-                || post.CommentCount == cursor.CommentCount 
-                && (post.LastTimeUpdatedAt < lastUpdatedTime 
-                    || (post.LastTimeUpdatedAt == lastUpdatedTime && post.Id < cursor.PostId)))
+              .ThenByDescending(post => post.LastTimeUpdatedAt)
+                .ThenByDescending(post => post.Id)
             .Take(prefetchCount)
             .Select(post => ProjectToDto(post))
             .ToListAsync();
@@ -61,5 +44,4 @@ public class NextPagePostPaginationStrategy:BasePostPaginationStrategy
 
         return posts.ToPaginatedResult(pageSize, hasMoreItems);
     }
-    
 }
