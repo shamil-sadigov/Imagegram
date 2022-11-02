@@ -32,7 +32,7 @@ builder.Services
     .AddControllers(x=> x.Filters.Add<ExceptionFilter>())
     .Services
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
+    .AddSwaggerWithAuth()
     .AddExceptionToHttpStatusCodeMapping(x =>
     {
         x.Map<EntityNotFoundException>(HttpStatusCode.NotFound);
