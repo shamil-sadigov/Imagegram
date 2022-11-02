@@ -1,6 +1,6 @@
 using System.Data;
 using Imagegram.Database;
-using Imagegram.Database.Models;
+using Imagegram.Database.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

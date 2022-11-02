@@ -1,8 +1,6 @@
-﻿using Imagegram.Features.Posts.GetPaginated.Pagination;
+﻿namespace Imagegram.Features.Posts.GetPaginated.Pagination;
 
-namespace Imagegram.Features.Posts.GetPaginated;
-
-public static class CollectionExtensions
+public static class CollectionPaginationExtensions
 {
     public static PaginatedResult<PostDto, PostCursor> ToPaginatedResult(
         this ICollection<PostDto> posts,

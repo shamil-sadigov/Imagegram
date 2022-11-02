@@ -1,5 +1,5 @@
 using Imagegram.Database;
-using Imagegram.Database.Models;
+using Imagegram.Database.Entities;
 using Imagegram.Features.Users.GetUserAccessToken;
 using MediatR;
 

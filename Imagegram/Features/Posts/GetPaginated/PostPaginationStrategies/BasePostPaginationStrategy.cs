@@ -1,4 +1,4 @@
-﻿using Imagegram.Database.Models;
+﻿using Imagegram.Database.Entities;
 using Imagegram.Features.Posts.GetPaginated.Pagination;
 
 namespace Imagegram.Features.Posts.GetPaginated.PostPaginationStrategies;
