@@ -28,12 +28,14 @@ public sealed class PostCursor
         PostId = postId;
     }
     
-    // TODO: This should be used on controller side
-    public static bool TryCreateFromBase64(string base64EncodedValue, out PostCursor? cursor)
+    public static bool TryCreateFromUrlEncoded(string urlEncodedCursor, out PostCursor? cursor)
     {
-        string[] values = base64EncodedValue.ConvertFromBase64().Split(":");
-
         cursor = default;
+
+        if (string.IsNullOrWhiteSpace(urlEncodedCursor))
+            return false;
+        
+        string[] values = urlEncodedCursor.UrlDecoded().Split(":");
         
         if (values.Length != 3)
             return false;
@@ -53,13 +55,11 @@ public sealed class PostCursor
 
     public static PostCursor FromPost(PostDto post)
     {
-        return new PostCursor(post.Id, post.CommentCount, post.LastTimeUpdatedAt.UtcTicks);
+        return new PostCursor(post.PostId, post.CommentCount, post.LastTimeUpdatedAt.UtcTicks);
     }
-    
-    
-    public string ToBase64()
+
+    public string UrlEncoded()
     {
-        return $"{PostId}:{CommentCount}:{Timestamp}".ConvertToBase64();
+        return $"{PostId}:{CommentCount}:{Timestamp}".UrlEncoded();
     }
-    
 }
