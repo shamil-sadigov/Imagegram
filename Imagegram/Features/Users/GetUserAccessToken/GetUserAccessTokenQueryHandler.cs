@@ -1,9 +1,10 @@
 using Imagegram.Database;
+using Imagegram.Database.Entities;
 using Imagegram.Features.Users.GetUserAccessToken.Services;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Features.Users.GetUserAccessToken;
-
 
 public class GetUserAccessTokenQueryHandler : IRequestHandler<CreateUserAccessTokenCommand, UserAccessToken>
 {
@@ -21,22 +22,25 @@ public class GetUserAccessTokenQueryHandler : IRequestHandler<CreateUserAccessTo
         _accessTokenGenerator = accessTokenGenerator;
     }
     
-    public Task<UserAccessToken> Handle(CreateUserAccessTokenCommand request, CancellationToken cancellationToken)
+    public async Task<UserAccessToken> Handle(CreateUserAccessTokenCommand request, CancellationToken cancellationToken)
     {
-        var user = _dbContext.Users.FirstOrDefault(x=> x.Email == request.Email);
+        var user = await FindUserAsync(request, cancellationToken);
 
-        if (user is null)
-        {
-            throw new EntityNotFoundException($"User with email '{request.Email}' was not found");
-        }
-        
         if (!_passwordManager.IsUserPasswordValid(user, request.Password))
         {
-            throw new InvalidOperationException($"Provided password for user with email '{request.Email}' is not valid");
+            throw new InvalidPasswordException(request.Email);
         }
 
         var generateToken = _accessTokenGenerator.GenerateToken(user);
 
-        return Task.FromResult(new UserAccessToken(generateToken));
+        return new UserAccessToken(generateToken);
+    }
+
+    private async Task<User> FindUserAsync(CreateUserAccessTokenCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
+        
+        return user ??  throw new EntityNotFoundException($"User with email '{request.Email}' was not found");
     }
 }

@@ -23,8 +23,8 @@ public sealed class AccessTokenGenerator : IAccessTokenGenerator
         Claim[] basicUserClaims =
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new("UserId", user.Id.ToString()),
-            new("Email", user.Email)
+            new(ApplicationClaimTypes.UserId, user.Id.ToString()),
+            new(ApplicationClaimTypes.Email, user.Email)
         };
             
         var tokenDescriptor = new SecurityTokenDescriptor()
@@ -43,6 +43,8 @@ public sealed class AccessTokenGenerator : IAccessTokenGenerator
 
         SecurityToken securityToken = jwtTokenHandler.CreateToken(tokenDescriptor);
 
-        return jwtTokenHandler.WriteToken(securityToken);
+        var token = jwtTokenHandler.WriteToken(securityToken);
+        
+        return token;
     }
 }
