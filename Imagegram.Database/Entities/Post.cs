@@ -1,5 +1,5 @@
 ﻿#pragma warning disable CS8618
-namespace Imagegram.Database.Models;
+namespace Imagegram.Database.Entities;
 
 public sealed class Post:BaseEntity
 {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Imagegram.Database;
-using Imagegram.Database.Models;
+using Imagegram.Database.Entities;
 using Imagegram.Tests.PaginationTests.Dtos;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Imagegram.Database.Models;
+using Imagegram.Database.Entities;
 using Imagegram.Features.Users;
 using Imagegram.Features.Users.GetUserAccessToken;
 using Microsoft.AspNetCore.DataProtection;

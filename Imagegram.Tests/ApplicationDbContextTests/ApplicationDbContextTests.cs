@@ -2,7 +2,7 @@
 using FluentAssertions.Execution;
 using FluentAssertions.Extensions;
 using Imagegram.Database;
-using Imagegram.Database.Models;
+using Imagegram.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Tests.ApplicationDbContextTests;

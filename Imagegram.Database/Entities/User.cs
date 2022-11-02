@@ -1,4 +1,4 @@
-namespace Imagegram.Database.Models;
+namespace Imagegram.Database.Entities;
 
 #pragma warning disable CS8618
 
@@ -12,5 +12,6 @@ public sealed class User:BaseEntity
     /// <summary>
     /// Password in protected format. Not in raw
     /// </summary>
+    /// TODO: Password can be longer than 256. Take into account
     public string Password { get; set; }
 }
