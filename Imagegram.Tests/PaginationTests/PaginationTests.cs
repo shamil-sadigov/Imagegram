@@ -2,24 +2,21 @@
 using Imagegram.Features;
 using Imagegram.Features.Posts.GetPaginated.Pagination;
 using Imagegram.Features.Posts.GetPaginated.PaginationStrategies;
+using Imagegram.Tests.PaginationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Tests.PaginationTests;
 
-// TODO: Inject connection string from configuration
-
-public class PaginationTests
+public class PaginationTests:IDisposable
 {
-    private const string ConnectionString = "Data Source=.;Initial Catalog=ImagegramTests;Integrated Security=True;";
-
     private PageSize _pageSize;
     
-    private readonly DbContextOptions<ApplicationDbContext> _dbOptions
-        = new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(ConnectionString).Options;
-
     public PaginationTests()
     {
-        var databaseSeeder = new DatabaseSeeder(_dbOptions);
+        using var dbContext = TestEnvironment.CreateDbContext();
+        dbContext.Database.EnsureCreated();
+        
+        var databaseSeeder = new DatabaseSeeder();
         databaseSeeder.SeedDataAsync().Wait();
     }
     
@@ -52,43 +49,43 @@ public class PaginationTests
         _pageSize = new PageSize(3);
         
         // 1st page
-        var firstPage = await new FirstPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
+        var firstPage = await new FirstPagePaginationStrategy(TestEnvironment.CreateDbContext())
             .PaginateAsync(pageSize: _pageSize, cursor: null);
 
         AssertFirstPageIsValid(firstPage, and => and.CanNavigateToTheNextPage());
         
         // Go to 2nd page
-        var secondPage = await new NextPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
+        var secondPage = await new NextPagePaginationStrategy(TestEnvironment.CreateDbContext())
             .PaginateAsync(pageSize: _pageSize, firstPage.EndCursor);
         
         AssertSecondPageIsValid(secondPage);
         
         // Go to 3d page
-        var thirdPage = await new NextPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
+        var thirdPage = await new NextPagePaginationStrategy(TestEnvironment.CreateDbContext())
             .PaginateAsync(_pageSize, secondPage.EndCursor);
         
         AssertThirdPageIsValid(thirdPage);
         
         // Go to 4th page
-        var forthPage = await new NextPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
+        var forthPage = await new NextPagePaginationStrategy(TestEnvironment.CreateDbContext())
             .PaginateAsync(_pageSize, thirdPage.EndCursor);
         
         AssertForthPageIsValid(forthPage);
         
         // Go back to 3th page
-        thirdPage = await new PreviousPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
+        thirdPage = await new PreviousPagePaginationStrategy(TestEnvironment.CreateDbContext())
             .PaginateAsync(_pageSize, forthPage.StartCursor);
         
         AssertThirdPageIsValid(thirdPage);
         
         // Go back to 2nd page
-        secondPage = await new PreviousPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
+        secondPage = await new PreviousPagePaginationStrategy(TestEnvironment.CreateDbContext())
             .PaginateAsync(_pageSize, thirdPage.StartCursor);
         
         AssertSecondPageIsValid(secondPage);
         
         // Go back to 1st page
-        firstPage = await new PreviousPagePaginationStrategy(new ApplicationDbContext(_dbOptions))
+        firstPage = await new PreviousPagePaginationStrategy(TestEnvironment.CreateDbContext())
             .PaginateAsync(_pageSize, secondPage.StartCursor);
         
         AssertFirstPageIsValid(firstPage, and => and.CannotNavigateToThePreviousPage());
@@ -159,5 +156,10 @@ public class PaginationTests
                 (commentCount: 4, postId: 2)
             );
     }
-    
+
+    public void Dispose()
+    {
+        using var dbContext = TestEnvironment.CreateDbContext();
+        dbContext.Database.EnsureDeleted();
+    }
 }

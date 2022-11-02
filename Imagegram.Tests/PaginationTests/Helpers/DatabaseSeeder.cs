@@ -4,34 +4,26 @@ using Imagegram.Database.Entities;
 using Imagegram.Tests.PaginationTests.Dtos;
 using Microsoft.EntityFrameworkCore;
 
-namespace Imagegram.Tests.PaginationTests;
+namespace Imagegram.Tests.PaginationTests.Helpers;
 
 public class DatabaseSeeder
 {
-    private readonly DbContextOptions<ApplicationDbContext> _options;
-
-    public DatabaseSeeder(DbContextOptions<ApplicationDbContext> options)
-    {
-        _options = options;
-    }
-    
     public async Task<List<Post>> SeedDataAsync()
     {
-        var postsFile = Path.Combine(Directory.GetCurrentDirectory(), "PaginationTests\\Posts.json");
-        var usersFile = Path.Combine(Directory.GetCurrentDirectory(), "PaginationTests\\Users.json");
+        var postsFile = Path.Combine(Directory.GetCurrentDirectory(), "PaginationTests\\MockData\\Posts.json");
+        var usersFile = Path.Combine(Directory.GetCurrentDirectory(), "PaginationTests\\MockData\\Users.json");
+
+        EnsureFilesExist(postsFile, usersFile);
 
         PostJsonDto[]? postDtos = JsonSerializer.Deserialize<PostJsonDto[]>(File.OpenRead(postsFile));
         UserJsonDto[]? userDtos = JsonSerializer.Deserialize<UserJsonDto[]>(File.OpenRead(usersFile));
         
-        var db = new ApplicationDbContext(_options);
-
-        await db.Database.EnsureDeletedAsync();
-        await db.Database.EnsureCreatedAsync();
-
+        var db = TestEnvironment.CreateDbContext();
+        
         var newUsers = userDtos!.Select(x => new User()
         {
             Email = x.Email,
-            Password = x.Password
+            ProtectedPassword = x.Password
         }).ToList();
 
         db.Users.AddRange(newUsers);
@@ -56,13 +48,23 @@ public class DatabaseSeeder
         }).ToList();
 
         db.Posts.AddRange(posts);
-
         await db.SaveChangesAsync();
         
         return posts;
     }
 
+    private static void EnsureFilesExist(string postsFile, string usersFile)
+    {
+        if (!File.Exists(postsFile))
+        {
+            throw new FileNotFoundException($"{postsFile} is not found for seeding!");
+        }
 
+        if (!File.Exists(usersFile))
+        {
+            throw new FileNotFoundException($"{usersFile} is not found for seeding!");
+        }
+    }
+    
     ImageInfo CreateSomeImageInfo() => new($"some-name-{Guid.NewGuid()}", $"some-uri-{Guid.NewGuid()}");
-
 }

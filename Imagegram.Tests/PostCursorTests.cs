@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Imagegram.Extensions;
 using Imagegram.Features;
 using Imagegram.Features.Posts.GetPaginated.Pagination;
 

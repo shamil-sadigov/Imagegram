@@ -20,7 +20,7 @@ public class PasswordManagerTests
         var user = new User()
         {
             Email = email,
-            Password = protectedPassword
+            ProtectedPassword = protectedPassword
         };
         
         passwordManager.IsUserPasswordValid(user, rawPassword)
@@ -40,7 +40,7 @@ public class PasswordManagerTests
         var user = new User()
         {
             Email = email,
-            Password = protectedPassword
+            ProtectedPassword = protectedPassword
         };
 
         var invalidRawPassword = rawPassword + "1";
@@ -58,7 +58,6 @@ public class PasswordManagerTests
             .BuildServiceProvider()
             .GetRequiredService<IDataProtectionProvider>();
 
-        var passwordManager = new PasswordManager(dataProtector);
-        return passwordManager;
+        return new PasswordManager(dataProtector);
     }
 }

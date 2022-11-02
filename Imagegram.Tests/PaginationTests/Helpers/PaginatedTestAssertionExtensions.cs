@@ -2,7 +2,7 @@
 using Imagegram.Features;
 using Imagegram.Features.Posts.GetPaginated.Pagination;
 
-namespace Imagegram.Tests.PaginationTests;
+namespace Imagegram.Tests.PaginationTests.Helpers;
 
 public static class PaginatedTestAssertionExtensions
 {

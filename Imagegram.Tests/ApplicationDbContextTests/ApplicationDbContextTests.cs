@@ -11,23 +11,11 @@ namespace Imagegram.Tests.ApplicationDbContextTests;
 // [CollectionDefinition("Non-parallel-tests", DisableParallelization = true)]
 public class ApplicationDbContextTests : IDisposable
 {
-    // TODO: Extract
-    private const string ConnectionString = "Data Source=.;Initial Catalog=ImagegramTests;Integrated Security=True;";
-
-    private readonly DbContextOptions<ApplicationDbContext> _dbOptions
-        = new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(ConnectionString).Options;
-
-    public void Dispose()
-    {
-        using var dbContext = new ApplicationDbContext(_dbOptions);
-        dbContext.Database.EnsureDeleted();
-    }
-    
     [Fact]
     public async Task New_Post_is_correctly_saved_in_database()
     {
         // Arrange
-        var (dbContext, user) = RecreateDatabaseWithSomeUser();
+        var (dbContext, user) = CreateDatabaseWithSomeUser();
 
         var currentDateTime = DateTimeOffset.UtcNow;
 
@@ -43,7 +31,7 @@ public class ApplicationDbContextTests : IDisposable
         await dbContext.SaveEntitiesAsync(newPost);
 
         // Assert
-        using (var newDbContext = new ApplicationDbContext(_dbOptions))
+        using (var newDbContext = TestEnvironment.CreateDbContext())
         using (new AssertionScope())
         {
             var foundPost = newDbContext.Posts.First(x => x.Id == newPost.Id);
@@ -63,7 +51,7 @@ public class ApplicationDbContextTests : IDisposable
     public async Task Post_with_new_comments_saved_correctly_in_database()
     {
         // Arrange
-        (ApplicationDbContext dbContext, var postOwner) = RecreateDatabaseWithSomeUser();
+        (ApplicationDbContext dbContext, var postOwner) = CreateDatabaseWithSomeUser();
 
         var newPost = CreateSomePost(postOwner);
         
@@ -76,7 +64,7 @@ public class ApplicationDbContextTests : IDisposable
 
         var currentDateTime = DateTimeOffset.UtcNow;
 
-        using (var newDbContext = new ApplicationDbContext(_dbOptions))
+        using (var newDbContext = TestEnvironment.CreateDbContext())
         {
             var post = newDbContext.Posts.First(x => x.Id == newPost.Id);
             post.AddComment("user comment", someUser.Id, currentDateTime - 10.Seconds());
@@ -85,7 +73,7 @@ public class ApplicationDbContextTests : IDisposable
         }
 
         // Assert
-        using (var newDbContext = new ApplicationDbContext(_dbOptions))
+        using (var newDbContext = TestEnvironment.CreateDbContext())
         using (new AssertionScope())
         {
             var foundPost = newDbContext.Posts
@@ -109,7 +97,7 @@ public class ApplicationDbContextTests : IDisposable
     public async Task Post_with_deleted_comments_saved_correctly_in_database()
     {
         // Arrange
-        (ApplicationDbContext dbContext, User postOwner) = RecreateDatabaseWithSomeUser();
+        (ApplicationDbContext dbContext, User postOwner) = CreateDatabaseWithSomeUser();
 
         var newPost = CreateSomePost(postOwner);
         newPost.AddComment("some-comment", postOwner.Id, DateTimeOffset.UtcNow);
@@ -119,7 +107,7 @@ public class ApplicationDbContextTests : IDisposable
         // Act
         var currentDateTime = DateTimeOffset.UtcNow;
 
-        using (var newDbContext = new ApplicationDbContext(_dbOptions))
+        using (var newDbContext = TestEnvironment.CreateDbContext())
         {
             var post = newDbContext
                 .Posts
@@ -134,7 +122,7 @@ public class ApplicationDbContextTests : IDisposable
         }
 
         // Assert
-        using (var newDbContext = new ApplicationDbContext(_dbOptions))
+        using (var newDbContext = TestEnvironment.CreateDbContext())
         using (new AssertionScope())
         {
             var foundPost = newDbContext.Posts
@@ -153,7 +141,7 @@ public class ApplicationDbContextTests : IDisposable
         var user = new User
         {
             Email = $"{Guid.NewGuid()}@gmail.com",
-            Password = "pass@#",
+            ProtectedPassword = "pass@#",
             CreatedAt = DateTimeOffset.Now
         };
 
@@ -170,9 +158,9 @@ public class ApplicationDbContextTests : IDisposable
             DateTimeOffset.UtcNow);
     }
 
-    private (ApplicationDbContext context, User user) RecreateDatabaseWithSomeUser()
+    private (ApplicationDbContext context, User user) CreateDatabaseWithSomeUser()
     {
-        var context = new ApplicationDbContext(_dbOptions);
+        var context = TestEnvironment.CreateDbContext();
         
         context.Database.EnsureCreated();
 
@@ -182,7 +170,7 @@ public class ApplicationDbContextTests : IDisposable
         var user = new User
         {
             Email = "some-user@gmail.com",
-            Password = "pass@#",
+            ProtectedPassword = "pass@#",
             CreatedAt = DateTimeOffset.Now
         };
 
@@ -190,5 +178,12 @@ public class ApplicationDbContextTests : IDisposable
 
         context.SaveChanges();
         return (context, user);
+    }
+    
+    
+    public void Dispose()
+    {
+        using var dbContext = TestEnvironment.CreateDbContext();
+        dbContext.Database.EnsureDeleted();
     }
 }

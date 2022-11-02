@@ -27,10 +27,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="PaginationTests\Posts.json">
+      <None Update="test-settings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="PaginationTests\Users.json">
+      <None Update="PaginationTests\MockData\Posts.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="PaginationTests\MockData\Users.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

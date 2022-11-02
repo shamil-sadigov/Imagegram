@@ -1,0 +1,3 @@
+﻿{
+    "SqlServerConnectionString": "Data Source=.;Initial Catalog=ImagegramTests;Integrated Security=True;"
+}
