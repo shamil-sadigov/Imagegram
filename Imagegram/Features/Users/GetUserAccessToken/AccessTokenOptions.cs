@@ -1,7 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Imagegram.Features.Users;
+namespace Imagegram.Features.Users.GetUserAccessToken;
 
 public class AccessTokenOptions
 {
@@ -15,12 +14,12 @@ public class AccessTokenOptions
     public byte[] GetSecretBytes()
         => Encoding.UTF8.GetBytes(SecretKey);
 
-    public void ThrowIfNotValid()
+    public void ThrowIfConfigurationInvalid()
     {
         if (string.IsNullOrWhiteSpace(SecretKey))
-            throw new ValidationException($"{nameof(SecretKey)} is not provided for {nameof(AccessTokenOptions)}");
+            throw new ConfigurationException($"{nameof(SecretKey)} is not provided for {nameof(AccessTokenOptions)}");
         
         if (string.IsNullOrWhiteSpace(SecretKey))
-            throw new ValidationException($"{nameof(AppName)} is not provided for {nameof(AccessTokenOptions)}");
+            throw new ConfigurationException($"{nameof(AppName)} is not provided for {nameof(AccessTokenOptions)}");
     }
 }
