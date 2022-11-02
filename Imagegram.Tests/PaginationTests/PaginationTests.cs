@@ -1,6 +1,5 @@
 ﻿using Imagegram.Database;
 using Imagegram.Features;
-using Imagegram.Features.Posts.GetPaginated;
 using Imagegram.Features.Posts.GetPaginated.Pagination;
 using Imagegram.Features.Posts.GetPaginated.PaginationStrategies;
 using Microsoft.EntityFrameworkCore;

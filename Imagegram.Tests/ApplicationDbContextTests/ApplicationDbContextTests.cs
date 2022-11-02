@@ -128,7 +128,7 @@ public class ApplicationDbContextTests : IDisposable
 
             var postOwnerComment = post.Comments.Single(x => x.CommentedBy == postOwner.Id);
 
-            post.RemoveComment(postOwnerComment.Id, currentDateTime);
+            post.RemoveComment(postOwnerComment.Id, postOwner.Id, currentDateTime);
 
             await newDbContext.SaveChangesAsync();
         }

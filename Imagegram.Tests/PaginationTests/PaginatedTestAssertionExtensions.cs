@@ -32,7 +32,7 @@ public static class PaginatedTestAssertionExtensions
         params (int commentCount, int postId)[] tuple)
     {
         page.Items
-            .Select(x=> (x.CommentCount, x.Id))
+            .Select(x=> (x.CommentCount, x.PostId))
             .Should()
             .ContainInOrder(tuple);
 
