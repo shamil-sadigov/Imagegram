@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
+using Imagegram.Api.Features.Users;
 using Imagegram.Database.Entities;
-using Imagegram.Features.Users;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 

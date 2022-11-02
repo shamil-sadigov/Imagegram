@@ -1,9 +1,7 @@
-﻿using Imagegram.Database;
-using Imagegram.Features;
-using Imagegram.Features.Posts.GetPaginated.Pagination;
-using Imagegram.Features.Posts.GetPaginated.PaginationStrategies;
+﻿using Imagegram.Api.Features;
+using Imagegram.Api.Features.Posts.GetPaginated.Pagination;
+using Imagegram.Api.Features.Posts.GetPaginated.PaginationStrategies;
 using Imagegram.Tests.PaginationTests.Helpers;
-using Microsoft.EntityFrameworkCore;
 
 namespace Imagegram.Tests.PaginationTests;
 

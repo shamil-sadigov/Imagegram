@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Imagegram\Imagegram.csproj" />
+      <ProjectReference Include="..\Imagegram.Api\Imagegram.Api.csproj" />
     </ItemGroup>
 
     <ItemGroup>

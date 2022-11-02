@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Imagegram", "Imagegram\Imagegram.csproj", "{A8804974-7DB2-448B-A6A7-D92E6BBF04B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Imagegram.Api", "Imagegram.Api\Imagegram.Api.csproj", "{A8804974-7DB2-448B-A6A7-D92E6BBF04B0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Imagegram.Database", "Imagegram.Database\Imagegram.Database.csproj", "{0CA77CE0-2B43-40A1-A7B1-669A12D61565}"
 EndProject
