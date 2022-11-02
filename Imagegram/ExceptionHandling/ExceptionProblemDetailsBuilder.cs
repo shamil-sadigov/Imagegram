@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Imagegram.ExceptionHandler;
+namespace Imagegram.ExceptionHandling;
 
 public sealed class ExceptionProblemDetailsBuilder
 {
@@ -23,10 +23,10 @@ public sealed class ExceptionProblemDetailsBuilder
         return this;
     }
 
-    public ProblemDetails? BuildProblemDetails<TException>(TException exception)
+    public ProblemDetails? BuildFromException<TException>(TException exception)
         where TException:Exception
     {
-        if (!_mapper.TryGetValue(typeof(TException), out HttpStatusCode httpStatusCode))
+        if (!_mapper.TryGetValue(exception.GetType(), out HttpStatusCode httpStatusCode))
         {
             return null;
         }
@@ -34,7 +34,7 @@ public sealed class ExceptionProblemDetailsBuilder
         return new ProblemDetails()
         {
             Status = (int)httpStatusCode,
-            Detail = exception.Message
+            Detail = exception.Message,
         };
     }
 }

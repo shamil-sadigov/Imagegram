@@ -1,14 +1,14 @@
-﻿namespace Imagegram.ExceptionHandler;
+﻿namespace Imagegram.ExceptionHandling;
 
 public static class ExceptionProblemDetailsBuilderDependencyExtension
 {
     public static IServiceCollection AddExceptionToHttpStatusCodeMapping(
         this IServiceCollection services, 
-        Action<ExceptionProblemDetailsBuilder> configureProblemDetails)
+        Action<ExceptionProblemDetailsBuilder> configure)
     {
         var builder = new ExceptionProblemDetailsBuilder();
 
-        configureProblemDetails(builder);
+        configure(builder);
 
         services.AddSingleton(builder);
 

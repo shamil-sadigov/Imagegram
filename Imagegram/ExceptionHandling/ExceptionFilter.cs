@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Imagegram.ExceptionHandler;
+namespace Imagegram.ExceptionHandling;
 
 // Just a lightweight exception to http status code mapper
 public class ExceptionFilter : IExceptionFilter
@@ -17,7 +17,7 @@ public class ExceptionFilter : IExceptionFilter
 
     public void OnException(ExceptionContext context)
     {
-        var problemDetails = _problemDetailsBuilder.BuildProblemDetails(context.Exception);
+        var problemDetails = _problemDetailsBuilder.BuildFromException(context.Exception);
 
         if (problemDetails is not null)
             context.Result = new ObjectResult(problemDetails)
