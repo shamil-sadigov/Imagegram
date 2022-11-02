@@ -12,7 +12,6 @@ public sealed class Post:BaseEntity
     public string Description { get; }
     public PostImage Image { get; }
     
-    // TODO: Add index here
     public int CommentCount { get; private set; }
 
     public byte[] RowVersion { get; private set; }
@@ -29,7 +28,7 @@ public sealed class Post:BaseEntity
         ImageInfo processedImage,
         DateTimeOffset currentDateTime)
     {
-        // TODO: Validate correctly Description, createdBy
+        // TODO: Strengthen validation
         
         CreatedBy = createdBy;
         Description = description ?? throw new ArgumentNullException(nameof(description));

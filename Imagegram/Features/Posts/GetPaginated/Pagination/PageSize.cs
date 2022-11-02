@@ -2,7 +2,6 @@
 
 public struct PageSize
 {
-    // TODO: Validate in API that value is Less than Min and more than Max
     public const int MaxAllowedPageSize = 50;
     public const int MinAllowedPageSize = 1;
     

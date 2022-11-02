@@ -32,10 +32,9 @@ public class PreviousPagePaginationStrategy:BasePaginationStrategy
             .ThenBy(post => post.LastTimeUpdatedAt)
             .ThenBy(post => post.Id)
 
-            // TODO: Change this comment
             // If there are posts with the same 'CommentCount' and same 'LastTimeUpdatedAt' 
-            // then return only those which Id < cursor.PostId
-            // because posts with Id >= cursor.PostId were already served in previous page
+            // then return only those which Id > cursor.PostId
+            // because posts with Id <= cursor.PostId were already served in previous page
 
             .Where(post =>
                 post.CommentCount > cursor.CommentCount
@@ -46,7 +45,7 @@ public class PreviousPagePaginationStrategy:BasePaginationStrategy
             .Select(post => ProjectToDto(post))
             .ToArrayAsync();
         
-        var ordered =  posts.OrderByDescending(x => x.CommentCount)
+        var ordered = posts.OrderByDescending(x => x.CommentCount)
             .ThenByDescending(x => x.LastTimeUpdatedAt)
             .ThenByDescending(x => x.PostId)
             .ToList();

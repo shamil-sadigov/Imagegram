@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Imagegram.Controllers;
 
-// TODO: Document controllers
-
 [ApiController]
 [Route("api/v1/users")]
 public class UsersController : ControllerBase
