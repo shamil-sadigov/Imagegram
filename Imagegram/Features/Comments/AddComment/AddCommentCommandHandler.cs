@@ -17,15 +17,15 @@ public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, Added
         _systemTime = systemTime;
     }
     
-    public async Task<AddedComment> Handle(AddCommentCommand request, CancellationToken cancellationToken)
+    public async Task<AddedComment> Handle(AddCommentCommand command, CancellationToken cancellationToken)
     {
         Comment addedComment = default;
         
         await _db.InTransactionAsync(IsolationLevel.RepeatableRead, async () =>
         {
-            var post = await _db.Posts.FindOrThrowAsync(request.PostId, cancellationToken);
+            var post = await _db.Posts.FindOrThrowAsync(command.PostId, cancellationToken);
             
-            addedComment = post.AddComment(request.CommentText, request.CommentedBy, _systemTime.CurrentUtc);
+            addedComment = post.AddComment(command.CommentText, command.CommentedBy, _systemTime.CurrentUtc);
 
             await _db.SaveChangesAsync(cancellationToken);
             

@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Imagegram.Features.Users.GetUserAccessToken;
+namespace Imagegram.Features.Users.CreateUserAccessToken;
 
 public sealed record CreateUserAccessTokenCommand(string Email, string Password) : IRequest<UserAccessToken>;
 

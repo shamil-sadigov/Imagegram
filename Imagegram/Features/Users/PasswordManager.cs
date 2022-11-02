@@ -17,7 +17,7 @@ public sealed class PasswordManager : IPasswordManager
     {
         var userRawPassword = _dataProtectionProvider
             .CreateProtector(user.Email)
-            .Unprotect(user.Password);
+            .Unprotect(user.ProtectedPassword);
         
         return userRawPassword == rawPassword;
     }

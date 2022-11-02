@@ -11,7 +11,7 @@ public class UserConfiguration:IEntityTypeConfiguration<User>
     {
         entity.HasKey(x => x.Id);
             
-        entity.Property(x => x.Password)
+        entity.Property(x => x.ProtectedPassword)
             .HasMaxLength(2048);
             
         entity.Property(x => x.Email)

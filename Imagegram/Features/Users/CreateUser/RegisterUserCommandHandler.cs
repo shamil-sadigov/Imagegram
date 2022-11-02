@@ -20,16 +20,16 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         _systemTime = systemTime;
     }
     
-    public async Task<RegisteredUser> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<RegisteredUser> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        await EnsureEmailIsUniqueAsync(request, cancellationToken);
+        await EnsureEmailIsUniqueAsync(command, cancellationToken);
         
-        var protectedPassword = _passwordManager.ProtectUserPassword(request.Email, request.Password);
+        var protectedPassword = _passwordManager.ProtectUserPassword(command.Email, command.Password);
         
         var newUser = new User()
         {
-            Email = request.Email,
-            Password = protectedPassword,
+            Email = command.Email,
+            ProtectedPassword = protectedPassword,
             CreatedAt = _systemTime.CurrentUtc
         };
         
@@ -40,11 +40,11 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         return new RegisteredUser(newUser.Id, newUser.Email);
     }
 
-    private async Task EnsureEmailIsUniqueAsync(RegisterUserCommand request, CancellationToken cancellationToken)
+    private async Task EnsureEmailIsUniqueAsync(RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        if (await _dbContext.Users.AnyAsync(x => x.Email == request.Email, cancellationToken))
+        if (await _dbContext.Users.AnyAsync(x => x.Email == command.Email, cancellationToken))
         {
-            throw new DuplicateEmailException(request.Email);
+            throw new DuplicateEmailException(command.Email);
         }
     }
 }

@@ -1,3 +1,5 @@
+using Imagegram.Extensions;
+
 namespace Imagegram.Features.Posts.GetPaginated.Pagination;
 
 public sealed class PostCursor

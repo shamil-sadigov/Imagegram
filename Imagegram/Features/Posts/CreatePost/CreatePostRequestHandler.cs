@@ -31,9 +31,9 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, PostD
         // TODO: We need to ensure that before deployment blob containers exists
     }
     
-    public async Task<PostDto> Handle(CreatePostCommand request, CancellationToken cancellationToken)
+    public async Task<PostDto> Handle(CreatePostCommand command, CancellationToken cancellationToken)
     {
-        Stream originalImageStream = request.Image.OpenReadStream();
+        Stream originalImageStream = command.Image.OpenReadStream();
         await using Stream processedImageStream = _imageProcessor.ProcessImage(originalImageStream);
         
         originalImageStream.Position = 0;
@@ -42,15 +42,15 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostCommand, PostD
         await EnsureDatabaseIsHealthyAsync(cancellationToken);
         
         (SavedImage originalImage, SavedImage processedImage) 
-            = await SaveImagesAsync(request.UserId, originalImageStream, processedImageStream, cancellationToken);
+            = await SaveImagesAsync(command.UserId, originalImageStream, processedImageStream, cancellationToken);
         
-        var post = await CreatePostAsync(request, originalImage, processedImage, cancellationToken);
+        var post = await CreatePostAsync(command, originalImage, processedImage, cancellationToken);
 
         return MapToDto(post);
     }
     
     /// <summary>
-    /// Lightweight protection to ensure that DB is available, so that when we save image in BlobStorage
+    /// Lightweight protection to fail fast, to ensure that DB is available, so that when we save image in BlobStorage
     /// we are able to save uri of that image in DB.
     /// 
     /// Because otherwise if we don't check DB availability we  could store image in BlobStorage and afterward find out

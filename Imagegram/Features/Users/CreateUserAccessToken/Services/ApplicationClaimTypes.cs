@@ -1,4 +1,4 @@
-﻿namespace Imagegram.Features.Users.GetUserAccessToken.Services;
+﻿namespace Imagegram.Features.Users.CreateUserAccessToken.Services;
 
 public static class ApplicationClaimTypes
 {

@@ -1,10 +1,10 @@
 using Imagegram.Database;
 using Imagegram.Database.Entities;
-using Imagegram.Features.Users.GetUserAccessToken.Services;
+using Imagegram.Features.Users.CreateUserAccessToken.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Imagegram.Features.Users.GetUserAccessToken;
+namespace Imagegram.Features.Users.CreateUserAccessToken;
 
 public class GetUserAccessTokenQueryHandler : IRequestHandler<CreateUserAccessTokenCommand, UserAccessToken>
 {
@@ -22,13 +22,13 @@ public class GetUserAccessTokenQueryHandler : IRequestHandler<CreateUserAccessTo
         _accessTokenGenerator = accessTokenGenerator;
     }
     
-    public async Task<UserAccessToken> Handle(CreateUserAccessTokenCommand request, CancellationToken cancellationToken)
+    public async Task<UserAccessToken> Handle(CreateUserAccessTokenCommand command, CancellationToken cancellationToken)
     {
-        var user = await FindUserAsync(request, cancellationToken);
+        var user = await FindUserAsync(command, cancellationToken);
 
-        if (!_passwordManager.IsUserPasswordValid(user, request.Password))
+        if (!_passwordManager.IsUserPasswordValid(user, command.Password))
         {
-            throw new InvalidPasswordException(request.Email);
+            throw new InvalidPasswordException(command.Email);
         }
 
         var generateToken = _accessTokenGenerator.GenerateToken(user);
@@ -36,11 +36,11 @@ public class GetUserAccessTokenQueryHandler : IRequestHandler<CreateUserAccessTo
         return new UserAccessToken(generateToken);
     }
 
-    private async Task<User> FindUserAsync(CreateUserAccessTokenCommand request, CancellationToken cancellationToken)
+    private async Task<User> FindUserAsync(CreateUserAccessTokenCommand command, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
-            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Email == command.Email, cancellationToken);
         
-        return user ??  throw new EntityNotFoundException($"User with email '{request.Email}' was not found");
+        return user ??  throw new EntityNotFoundException($"User with email '{command.Email}' was not found");
     }
 }

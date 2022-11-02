@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Imagegram.Features.Users.GetUserAccessToken;
+namespace Imagegram;
 
 public class AccessTokenOptions
 {

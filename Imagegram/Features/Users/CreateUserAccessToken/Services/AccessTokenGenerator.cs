@@ -4,7 +4,7 @@ using Imagegram.Database.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Imagegram.Features.Users.GetUserAccessToken.Services;
+namespace Imagegram.Features.Users.CreateUserAccessToken.Services;
 
 public sealed class AccessTokenGenerator : IAccessTokenGenerator
 {
@@ -27,24 +27,25 @@ public sealed class AccessTokenGenerator : IAccessTokenGenerator
             new(ApplicationClaimTypes.Email, user.Email)
         };
             
+        
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity(basicUserClaims),
             Audience = _accessTokenOptions.AppName,
             Issuer = _accessTokenOptions.AppName,
-            // Expires = DateTime.UtcNow + _accessTokenOptions.TokenLifetime, // NO need
             SigningCredentials = 
                 new SigningCredentials(
                     key: new SymmetricSecurityKey(_accessTokenOptions.GetSecretBytes()),
-                    algorithm: SecurityAlgorithms.HmacSha256)
+                    algorithm: SecurityAlgorithms.HmacSha256),
+            
+            // Expires = ...
+            // Token expiration time will be needed in production, but for now, let's just skip it
         };
 
         var jwtTokenHandler = new JwtSecurityTokenHandler();
 
         SecurityToken securityToken = jwtTokenHandler.CreateToken(tokenDescriptor);
 
-        var token = jwtTokenHandler.WriteToken(securityToken);
-        
-        return token;
+        return jwtTokenHandler.WriteToken(securityToken);
     }
 }

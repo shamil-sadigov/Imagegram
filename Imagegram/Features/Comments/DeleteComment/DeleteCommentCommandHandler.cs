@@ -17,15 +17,15 @@ public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand,
         _systemTime = systemTime;
     }
 
-    public async Task<Unit> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteCommentCommand command, CancellationToken cancellationToken)
     {
         await _db.InTransactionAsync(IsolationLevel.RepeatableRead, async () =>
         {
             var post = await _db.Posts
-                .Include(x => x.Comments.Where(c => c.Id == request.CommentId))
-                .FindOrThrowAsync(request.PostId, cancellationToken);
+                .Include(x => x.Comments.Where(c => c.Id == command.CommentId))
+                .FindOrThrowAsync(command.PostId, cancellationToken);
             
-            post.RemoveComment(request.CommentId, request.InitiatorId, _systemTime.CurrentUtc);
+            post.RemoveComment(command.CommentId, command.InitiatorId, _systemTime.CurrentUtc);
 
             await _db.SaveChangesAsync(cancellationToken);
             

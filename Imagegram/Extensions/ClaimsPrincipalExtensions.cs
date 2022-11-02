@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Imagegram.Features.Users.GetUserAccessToken.Services;
+using Imagegram.Features.Users.CreateUserAccessToken.Services;
 
 namespace Imagegram.Extensions;
 

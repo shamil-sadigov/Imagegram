@@ -1,4 +1,4 @@
-﻿namespace Imagegram.Features.Users.GetUserAccessToken;
+﻿namespace Imagegram.Features.Users.CreateUserAccessToken;
 
 public class InvalidPasswordException:Exception
 {
@@ -11,6 +11,6 @@ public class InvalidPasswordException:Exception
 
     private static string BuildMessage(string email)
     {
-        return $"Password provided for email '{email}' is not valid";
+        return $"ProtectedPassword provided for email '{email}' is not valid";
     }
 }

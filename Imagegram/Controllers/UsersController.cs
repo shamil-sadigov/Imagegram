@@ -1,5 +1,5 @@
 ﻿using Imagegram.Features.Users.CreateUser;
-using Imagegram.Features.Users.GetUserAccessToken;
+using Imagegram.Features.Users.CreateUserAccessToken;
 using Imagegram.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
