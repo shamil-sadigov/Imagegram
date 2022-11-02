@@ -38,7 +38,7 @@ public sealed class Post:BaseEntity
         LastTimeUpdatedAt = currentDateTime;
     }
     
-    // For Ef
+    // For EF
     private Post()
     {
         
@@ -54,7 +54,7 @@ public sealed class Post:BaseEntity
             CreatedAt = currentDateTime
         };
         
-        _comments!.Add(newComment);
+        _comments.Add(newComment);
         
         CommentCount++;
         LastTimeUpdatedAt = currentDateTime;
@@ -62,13 +62,8 @@ public sealed class Post:BaseEntity
         return newComment;
     }
     
-    public void RemoveComment(int commentId, DateTimeOffset currentDateTime)
+    public void RemoveComment(int commentId, int initiatorId, DateTimeOffset currentDateTime)
     {
-        if (_comments is null)
-        {
-            throw new InvalidOperationException("Post has no any comments");
-        }
-        
         var commentToDelete = _comments.FirstOrDefault(x=> x.Id == commentId);
 
         if (commentToDelete is null)
@@ -76,6 +71,11 @@ public sealed class Post:BaseEntity
             throw new InvalidOperationException($"Comment with id '{commentId}' was not found");
         }
 
+        if (commentToDelete.CommentedBy != initiatorId)
+        {
+            throw new InvalidOperationException($"Only user who created comment can delete it.");
+        }
+        
         _comments.Remove(commentToDelete);
         
         CommentCount--;

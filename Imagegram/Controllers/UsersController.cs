@@ -10,7 +10,7 @@ namespace Imagegram.Controllers;
 // TODO: Document controllers
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v1/users")]
 public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -30,17 +30,14 @@ public class UsersController : ControllerBase
         return Ok();
     }
     
-    [HttpGet("{userId}/access-token")]
     [AllowAnonymous]
+    [HttpPost("access-token")]
     public async Task<IActionResult> GetAccessToken([FromBody] GetAccessTokenRequest request)
     {
         var userAccessToken = await _mediator.Send(new CreateUserAccessTokenCommand(request.Email, request.Password));
 
-        var accessTokenResponse = new AccessTokenResponse()
-        {
-            Token = userAccessToken.Value
-        };
-        
+        var accessTokenResponse = new AccessTokenResponse(userAccessToken.Value);
+
         return Ok(accessTokenResponse);
     }
 }

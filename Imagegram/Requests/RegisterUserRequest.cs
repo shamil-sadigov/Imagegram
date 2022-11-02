@@ -2,11 +2,8 @@
 
 namespace Imagegram.Requests;
 
-public class RegisterUserRequest
-{
-    [EmailAddress]
-    public string Email { get; set; }
-    
-    [MinLength(5)]
-    public string Password { get; set; }
-}
+public sealed record RegisterUserRequest
+(
+    [EmailAddress] string Email, 
+    [MinLength(5)] string Password
+);
