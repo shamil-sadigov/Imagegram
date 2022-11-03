@@ -95,7 +95,7 @@ But for now, it's not implemented. Kindly ask you to suffer a little)
 
 ### Notes
 
-In order to keep project simple and not bloated, I skipped some points
+In order to keep project simple and not bloated, I skipped some points.
 
 - EF migrations not added
 - No logging
