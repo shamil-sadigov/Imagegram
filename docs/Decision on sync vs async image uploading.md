@@ -19,7 +19,7 @@ This approach is simplest design, but drawback is that we force the client to wa
 - Client send a POST request to create a post with image
 - API uploads the image to BlobStorage, and triggers azure-function to process (resize & convert) the image
 - API creates a Job that keep the status of image processing operation and return it to Client
-- Client check status of the Job from time to time by polling API, once Job is completed, Client will provided with ID of the newly created Post
+- Client check status of the Job from time to time by polling API, once Job is completed, Client will be provided with ID of the newly created Post
 
 This approach is more advantageous, because client is not blocked synchnously by waiting for post creation, 
 BUT this approach is more complicated than previous synchronous one, it can complicate both client and API, polling-based technique it's more resource-consuming and client is not immediately notified about job completion, so there can be some lag.
