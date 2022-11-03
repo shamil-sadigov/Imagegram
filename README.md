@@ -115,7 +115,7 @@ As you see `hasMoreItems = true` which means that there are more posts available
 Get second page, by specifying value of `endCursor` from the last response
 
 ```
-GET ...api/posts?limit=3?after=8:63802873431:3
+GET ...api/posts?limit=3&after=8:63802873431:3
 
 
 RESPONSE 
@@ -139,7 +139,7 @@ RESPONSE
 Get third page, by specifying value of `endCursor` from the last response
 
 ```
-GET ...api/posts?limit=3?after=4:63802837431:2
+GET ...api/posts?limit=3&after=4:63802837431:2
 
 
 RESPONSE 
@@ -163,7 +163,7 @@ RESPONSE
 Get forth page, by specifying value of `endCursor` from the last response
 
 ```
-GET ...api/posts?limit=3?after=1:63801973431:8
+GET ...api/posts?limit=3&after=1:63801973431:8
 
 
 RESPONSE 
@@ -180,10 +180,37 @@ RESPONSE
 
 ```
 
-As you see, `hasMoreItems = false` which means that there is not items, and we cannot navigate to the next page.
+As you see, `hasMoreItems = false` which means that there is not items, and we cannot navigate to the next page. But we can navigate to previous page!
+
+---
+
+Go back to previous page (third), by specifying value of `startCursor` from the last response
+
+```
+GET ...api/posts?limit=3&before=0:63802729431:9
+
+
+RESPONSE 
+{
+  "requestedPageSize": 3,
+  "actualPageSize": 3,
+  "hasMoreItems": true,
+  "items": [...posts...],
+  "cursors": {
+    "startCursor": "4:63802729431:5",
+    "endCursor": "1:63801973431:8"
+  }
+}
+
+```
+
+So, probably you got the point how it works.
+
+---
 
 
 
+### Problem
 
 
 
