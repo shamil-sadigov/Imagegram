@@ -3,7 +3,7 @@
 
 There are multiple ways to create post with image uploading. Mainly it's divited into synchronous and asynchronous approaches
 
-## Synchronous approach
+### Synchronous approach
 
 - Client send a POST request to create a post with image
 - API uploads the image to BlobStorage, saves Post in DB
@@ -14,7 +14,7 @@ This approach is simplest design, but drawback is that we force the client to wa
 ![Code models (8)](https://user-images.githubusercontent.com/36125138/199660965-6bfaf902-215e-40d5-9a0c-2d9636952a7b.jpg)
 
 
-## [Asynchronous Request-Reply pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/async-request-reply)
+### [Asynchronous Request-Reply pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/async-request-reply)
 
 - Client send a POST request to create a post with image
 - API uploads the image to BlobStorage, and triggers azure-function to process (resize & convert) the image
