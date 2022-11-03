@@ -19,7 +19,7 @@ public static class SwaggerExtensions
                 Version = "v1"
             });
             
-            ops.IncludeXmlComments(xmlPath);
+            // ops.IncludeXmlComments(xmlPath);
             ops.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
             {
                 Type = SecuritySchemeType.ApiKey,
