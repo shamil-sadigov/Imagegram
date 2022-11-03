@@ -154,9 +154,9 @@ public class Program
                 return;
             }
             
-            if (existingBlobContainers.Any(x=> x.Name.Equals(requiredContainer, StringComparison.InvariantCultureIgnoreCase)))
+            if (!existingBlobContainers.Any(x=> x.Name.Equals(requiredContainer, StringComparison.InvariantCultureIgnoreCase)))
             {
-                blobServiceClient!.CreateBlobContainer(requiredContainer, PublicAccessType.Blob);
+                blobServiceClient.CreateBlobContainer(requiredContainer, PublicAccessType.Blob);
             }
         }
     }
