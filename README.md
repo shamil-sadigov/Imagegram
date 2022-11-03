@@ -74,10 +74,10 @@ GET api/v1/posts?limit=5&before={startCursor}
 ```py
 
 # Leave comment on post
-POST api/v1/posts/{postId}/comment
+POST api/v1/posts/{postId}/comments
 
 # Delete comment from the post. (PS: Only user who created comment can delete it)
-DELETE api/v1/posts/{postId}/comment/{commentId}
+DELETE api/v1/posts/{postId}/comments/{commentId}
 
 ```
 
