@@ -11,7 +11,8 @@ namespace Imagegram.Api.Requests;
 /// If client want to navigate to the next page, it should provide 'Limit' and 'AfterCursor'
 /// If client want to navigate to the previous page, it should provide 'Limit' and 'BeforeCursor'
 ///
-/// For more details see here => TODO: Add link
+/// For more details see here =>
+/// https://github.com/shamil-sadigov/Imagegram/blob/master/docs/Decision%20on%20cursor-based-navigation.md#how-it-works
 /// </summary>
 public record GetPostsRequest:IValidatableObject
 {
