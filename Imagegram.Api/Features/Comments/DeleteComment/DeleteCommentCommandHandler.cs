@@ -19,7 +19,7 @@ public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand,
 
     public async Task<Unit> Handle(DeleteCommentCommand command, CancellationToken cancellationToken)
     {
-        // TODO: It's better to SELECT FOR UPDATE instead of REPETABLE_READ isoliation level
+        // TODO: Maybe it's better to SELECT FOR UPDATE instead of REPETABLE_READ isoliation level
 
         await _db.InTransactionAsync(IsolationLevel.RepeatableRead, async () =>
         {

@@ -21,7 +21,7 @@ public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, Added
     {
         Comment addedComment = default;
         
-        // TODO: It's better to SELECT FOR UPDATE instead of REPETABLE_READ isoliation level
+        // TODO: Maybe it's better to SELECT FOR UPDATE instead of REPETABLE_READ isoliation level
         
         await _db.InTransactionAsync(IsolationLevel.RepeatableRead, async () =>
         {
