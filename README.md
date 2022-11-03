@@ -97,6 +97,8 @@ Set connection string for SQL Server and Azure Blob Storage in `appsettings.json
 
 Now app can be deployed on Azure (or any other infrastructure).
 
+Swagger is availabe at path `/swagger`
+
 ## How to run unit tests
 
 There are some integration tests with Database.
