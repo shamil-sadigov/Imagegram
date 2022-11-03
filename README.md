@@ -5,7 +5,7 @@ API that allows you to upload posts with images and comment on them
 ### Tech stack
 - ASP.NET 6 API  
 - EF/SQL Server 
-- Azure Blob Storage
+- Azure Blob Storage (for saving images)
 
 ## Architecture decision records
 - [Decision on choosing database SQL vs NoSQL](https://github.com/shamil-sadigov/Imagegram/blob/master/docs/Decision%20on%20Database.SQL%20vs%20NoSQL.md)
@@ -15,35 +15,26 @@ API that allows you to upload posts with images and comment on them
 
 ## How to use API
 
-![image](https://user-images.githubusercontent.com/36125138/199700836-3bfbe438-ce49-4922-a82f-9274b66d8179.png)
+### USERS
 
-I believe that endpoints pretty intuitive and doesn't need comprehensive documentation.
+Before creating and commenting posts, you need to register a user and get user access token. 
+When creating user, there is not any strong password policies, it just should not be less than 5 characters.
 
-Before creating and commenting posts, you need to register a user and get user access token.
+```py
 
-Register user
-
-```
+# Register new user
 POST api/v1/users
 {
   "email": "some@email.com",
   "password": "pass@#"
 }
 
-```
 
-Get user access token (JWT)
-
-```
+# Get user access token (which is JWT)
 POST api/v1/users/access-token
 {
   "email": "some@email.com",
   "password": "pass@#"
-}
-
-RESPONE
-{
-  "token": {ACEESS_TOKEN}
 }
 
 ```
@@ -52,6 +43,43 @@ Now you can create/get post, add/delete comments on posts, and retrieve posts [t
 But be sure to specify access token in HTTP header.
 
 `Authorization: Bearer {ACEESS_TOKEN}`
+
+
+### POSTS
+
+```py
+
+# Create a post by specifying Description and Image of the post
+POST api/v1/posts  
+
+# Get post without comments
+GET api/v1/posts/{postId} 
+
+# Get post with comments
+GET api/v1/posts/{postId}?includeComments=true
+
+# Get first page of posts where page size = 5. (PS: Max allowed page size is 50)
+GET api/v1/posts?limit=5 
+
+# Get to the next page.
+GET api/v1/posts?limit=5&after={endCursor}
+
+# Get to the previous page.
+GET api/v1/posts?limit=5&after={startCursor}
+
+```
+
+### COMMENTS
+
+```py
+
+# Leave comment on post
+POST api/v1/posts/{postId}/comment
+
+# Delete comment from the post. (PS: Only user who created comment can delete it)
+DELETE api/v1/posts/{postId}/comment/{commentId}
+
+```
 
 ## How to run/deploy
 
