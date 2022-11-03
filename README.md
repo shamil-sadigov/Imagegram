@@ -14,7 +14,7 @@ API that allows you to upload posts with images and comment on them
 
 ## How cursor-based navigation work
 
-When client should be able to retrieve posts via cursor-based pagination, and posts should be sorted by the number of comments (desc).
+Client should be able to retrieve posts via cursor-based pagination, and posts should be sorted by the number of comments (desc).
 
 
 Let's say that we have 11 posts in DB.
