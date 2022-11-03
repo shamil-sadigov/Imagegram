@@ -28,13 +28,13 @@ public class PostsController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<PaginatedPostsResponse> GetPaginates([FromQuery] GetPostsRequest request)
+    public async Task<PaginatedPostsResponse> GetPaginates([FromQuery] GetPostsRequest request, CancellationToken token)
     {
         (PageSize pageSize, PostCursor? beforeCursor, PostCursor? afterCursor) = BuildQueryParameters(request);
 
         var query = new GetPostsQuery(pageSize, beforeCursor, afterCursor);
 
-        var paginatedResult = await _mediator.Send(query);
+        var paginatedResult = await _mediator.Send(query, token);
         
         var response = new PaginatedPostsResponse
         (
@@ -53,9 +53,9 @@ public class PostsController : ControllerBase
     /// <param name="includeComments">If 'true' then post will be returned along with comments</param>
     /// <returns></returns>
     [HttpGet("{postId:int}")]
-    public async Task<PostDto> Get(int postId, bool includeComments)
+    public async Task<PostDto> Get(int postId, bool includeComments, CancellationToken token)
     {
-        var post = await _mediator.Send(new GetPostQuery(postId, includeComments));
+        var post = await _mediator.Send(new GetPostQuery(postId, includeComments), token);
         return post;
     }
     
@@ -81,15 +81,15 @@ public class PostsController : ControllerBase
         return (pageSize, null, null);
     }
 
-
+    
     [HttpPost]
     [RequestSizeLimit(105857600)]
-    public async Task<IActionResult> CreatePost([FromForm] CreatePostRequest request)
+    public async Task<IActionResult> CreatePost([FromForm] CreatePostRequest request, CancellationToken token)
     {
         var currentUserId = User.GetId();
 
         var createdPost = await _mediator.Send(
-            new CreatePostCommand(currentUserId, request.Description, request.ImageFile));
+            new CreatePostCommand(currentUserId, request.Description, request.ImageFile), token);
         
         return CreatedAtAction(nameof(Get), new
         {
@@ -98,26 +98,29 @@ public class PostsController : ControllerBase
     }
     
     [HttpPost("{postId:int}/comments")]
-    public async Task<AddedComment> AddComment(int postId, [FromBody] AddCommentRequest request)
+    public async Task<AddedComment> AddComment(
+        int postId, 
+        [FromBody] AddCommentRequest request, 
+        CancellationToken token)
     {
         var addedComment = await _mediator.Send(
             new AddCommentCommand(
                 postId, 
                 CommentedBy: User.GetId(),
-                request.CommentText));
+                request.CommentText), token);
 
         // Maybe 201 is better
         return addedComment;
     }
     
     [HttpDelete("{postId:int}/comments/{commentId:int}")]
-    public async Task<IActionResult> DeleteComment(int postId, int commentId)
+    public async Task<IActionResult> DeleteComment(int postId, int commentId, CancellationToken token)
     {
         await _mediator.Send(
             new DeleteCommentCommand(
                 postId,
                 commentId,
-                InitiatorId: User.GetId()));
+                InitiatorId: User.GetId()), token);
         
         return NoContent();
     }

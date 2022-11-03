@@ -20,9 +20,9 @@ public class UsersController : ControllerBase
     
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request)
+    public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request, CancellationToken token)
     {
-        await _mediator.Send(new RegisterUserCommand(request.Email, request.Password));
+        await _mediator.Send(new RegisterUserCommand(request.Email, request.Password), token);
         
         // TODO: It's better to return 201, but for now it's not important
         return Ok();
@@ -30,9 +30,9 @@ public class UsersController : ControllerBase
     
     [AllowAnonymous]
     [HttpPost("access-token")]
-    public async Task<IActionResult> GetAccessToken([FromBody] GetAccessTokenRequest request)
+    public async Task<IActionResult> GetAccessToken([FromBody] GetAccessTokenRequest request, CancellationToken token)
     {
-        var userAccessToken = await _mediator.Send(new CreateUserAccessTokenCommand(request.Email, request.Password));
+        var userAccessToken = await _mediator.Send(new CreateUserAccessTokenCommand(request.Email, request.Password), token);
 
         var accessTokenResponse = new AccessTokenResponse(userAccessToken.Value);
 
