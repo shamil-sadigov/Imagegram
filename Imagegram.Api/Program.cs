@@ -150,7 +150,7 @@ public class Program
         {
             if (existingBlobContainers is null)
             {
-                blobServiceClient!.CreateBlobContainer(requiredContainer, PublicAccessType.Blob);
+                blobServiceClient.CreateBlobContainer(requiredContainer, PublicAccessType.Blob);
                 return;
             }
             
