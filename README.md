@@ -95,7 +95,7 @@ Set connection string for SQL Server and Azure Blob Storage in `appsettings.json
 
 ℹ️ It's not required to create empty database in SQL Server or containers in Blob Storage. It will be done on application startup. 
 
-Now app can be deployed on Azure (or any other infrastructure).
+Now app can be deployed on Azure as App Service (or any other infrastructure).
 
 Swagger is availabe at path `/swagger`
 
