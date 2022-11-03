@@ -3,7 +3,7 @@
 API that allows you to upload posts with images and comment on them
 
 ### Tech stack
-- .NET 6 
+- ASP.NET 6 API  
 - EF/SQL Server 
 - Azure Blob Storage
 
@@ -64,6 +64,9 @@ Set connstring string for SQL Server and Azure Blob Storage in `appsettings.json
   }
 ...
 ```
+No need to create empty database in SQL Server or containers in Blob Storage. It will be done on application startup. 
+
+Can be deployed on Azure.
 
 ## How to run unit tests
 
@@ -71,25 +74,25 @@ There are some integration tests with Database.
 
 So if you want to run them, be sure that you specified connstring string for SQL Server in `test-settings.json`
 
-
-No need to create empty database in SQL Server or containers in Blob Storage. It will be done on application startup. 
-
 ```
 {
     "SqlServerConnectionString": "..."
 }
 ```
 
-I know, it's bad to be dependent on local environment. It's better to wrap integration tests into docker-compose and run all dependents services in docker. But for now, it's not implemented. Kindly ask you to suffer a little)
+I know, it's not convenient to be dependent on local environment when it comes to integration tests. 
+It's better to wrap them into docker-compose and run all dependents services in docker. 
+But for now, it's not implemented. Kindly ask you to suffer a little)
 
+
+### **Product:**
 
 ## Future improvements
 
-
-- Distributed cache
-- Make image uploading async
-- Improve cursor-based navigation
-- Add CDN for images
+- We can add distributed cache (Redis) to improve response latency and lighten the load on database
+- [Image uploading can be made async](https://github.com/shamil-sadigov/Imagegram/blob/master/docs/Decision%20on%20sync%20vs%20async%20image%20uploading.md#asynchronous-approach-with-websockets)
+- Improve cursor-based navigation by trying [this solution](https://phauer.com/2017/web-api-pagination-continuation-token/) to prevent the [problem of dynamically chaning posts](https://github.com/shamil-sadigov/Imagegram/blob/master/docs/Decision%20on%20cursor-based-navigation.md#problem)
+- We can configure CDN for images, to serve images faster
 
 ### Notes
 
