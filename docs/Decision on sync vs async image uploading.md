@@ -28,9 +28,9 @@ BUT this approach is more complicated than previous synchronous one, it can comp
 
 ## Asynchronous approach with websockets
 
-This is similar to previous Asynchronous Request-Reply pattern, but now client doesnt't need to do polling of status of the job, instead client just has stable websocket connection to API server, and once API completed image peorcessing and created post, API can notify Client about it via websockets. 
+This is similar to previous Asynchronous Request-Reply pattern, but now client doesnt't need to do polling of status of the job, instead client just has stable websocket connection to API server, and once API completed image processing and created post, API can notify Client about it via websockets. 
 
-This approach is more advantageous, because client is not blocked synchnously by waiting for post creation, it's less resource-consuming and client is immediately notified once post is created. BUT this approach is more complicated and labor-intensitve.
+This approach is more advantageous, because client is not blocked synchnously by waiting for post creation, it's less resource-consuming because client no longer do polling (which would create new TCP connection on each poll) and client is immediately notified once post is created. BUT this approach is more complicated and labor-intensitve.
 
 
 ## So, what I've chosen
