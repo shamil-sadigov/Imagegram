@@ -4,7 +4,7 @@ API that allows you to upload posts with images and comment on them
 
 ### Tech stack
 - .NET 6 
-- SQL Server
+- EF/SQL Server 
 - Azure Blob Storage
 
 ## Architecture decision records
