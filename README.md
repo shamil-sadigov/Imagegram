@@ -17,7 +17,7 @@ API that allows you to upload posts with images and comment on them
 
 ![image](https://user-images.githubusercontent.com/36125138/199700836-3bfbe438-ce49-4922-a82f-9274b66d8179.png)
 
-Before creating and commenting posts, you need to register a user.
+Before creating and commenting posts, you need to register a user and get user access token.
 
 Register user
 
@@ -49,12 +49,14 @@ RESPONE 200
 
 ```
 
-Now you can create/get post, add/delete comments on posts. But be sure to specify access token in HTTP header.
+Now you can create/get post, add/delete comments on posts, and retrieve posts [through pagination](https://github.com/shamil-sadigov/Imagegram/blob/master/docs/Decision%20on%20cursor-based-navigation.md#how-it-works). 
+But be sure to specify access token in HTTP header.
+
 `Authorization: Bearer {ACEESS_TOKEN}`
 
 ## How to run/deploy
 
-Set connstring string for SQL Server and Azure Blob Storage in `appsettings.json`
+Set connection string for SQL Server and Azure Blob Storage in `appsettings.json`
 
 
 ```
@@ -62,11 +64,11 @@ Set connstring string for SQL Server and Azure Blob Storage in `appsettings.json
     "Database": "",
     "BlobStorage": ""
   }
-...
 ```
-No need to create empty database in SQL Server or containers in Blob Storage. It will be done on application startup. 
 
-Can be deployed on Azure.
+ℹ️ No need to create empty database in SQL Server or containers in Blob Storage. It will be done on application startup. 
+
+Now app can be deployed on Azure (or any other infrastructure).
 
 ## How to run unit tests
 
