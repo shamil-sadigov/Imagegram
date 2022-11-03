@@ -101,5 +101,5 @@ In order to keep project simple and not bloated, I skipped some points
 - No logging
 - Password protection is lightweight
 - JWT has no expiration time
-- No caching
+- No In memory caching
 
