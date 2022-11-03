@@ -209,16 +209,18 @@ So, probably you got the point how it works.
 ---
 
 
+## Problem
 
-### Problem
+The problem is that approach to pagination outlined above has drawbacks, because it doesn't consider dynamic nature of `CommentCount` and `LastUpdatedAt` attributes.
 
+While client is navigating throug pages, number of comments on some posts can be increased or decreased, so client probably will not see some of the posts, or may see duplicated posts. 
 
+One of the solutions is to implement tricky [continuation token](https://phauer.com/2017/web-api-pagination-continuation-token/).
 
+### Decision
 
+I decided to stick with the solution described above, yep, it has drawbacks, it's not perfect, BUT it's less labor-intensive and just 'good enough' for the first release.
 
-BUt this approach is still bad
-
-It's good enough but not the best
 
 
 ## How to use API
