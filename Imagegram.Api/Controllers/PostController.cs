@@ -50,9 +50,6 @@ public class PostsController : ControllerBase
         return response;
     }
     
-    /// <summary>
-    /// Get post
-    /// </summary>
     /// <param name="includeComments">If 'true' then post will be returned along with comments</param>
     /// <returns></returns>
     [HttpGet("{postId:int}")]
