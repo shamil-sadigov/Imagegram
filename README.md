@@ -17,7 +17,7 @@ API that allows you to upload posts with images and comment on them
 
 ![image](https://user-images.githubusercontent.com/36125138/199700836-3bfbe438-ce49-4922-a82f-9274b66d8179.png)
 
-I believe that endpoints pretty intuitive and doesn't need comments.
+I believe that endpoints pretty intuitive and doesn't need comprehensive documentation.
 
 But before creating and commenting posts, you need to register a user and get user access token.
 
