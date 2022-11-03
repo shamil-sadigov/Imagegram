@@ -39,7 +39,7 @@ POST api/v1/users/access-token
 
 ```
 
-Now, by having access tolen you can create/get post, add/delete comments on posts, and retrieve posts [through pagination](https://github.com/shamil-sadigov/Imagegram/blob/master/docs/Decision%20on%20cursor-based-navigation.md#how-it-works). 
+Now, by having access token you can create/get post, add/delete comments on posts, and retrieve posts [through pagination](https://github.com/shamil-sadigov/Imagegram/blob/master/docs/Decision%20on%20cursor-based-navigation.md#how-it-works). 
 But be sure to specify access token in HTTP header.
 
 `Authorization: Bearer {ACEESS_TOKEN}`
