@@ -38,6 +38,30 @@ This problem can be solved by pessimistic/optimistic locking patterns, such as m
 Well, I'm inclined to go with SQL, because its ACID properties allow my data to keep consistent.
 
 
+
+## Decision on sync vs async image uploading
+
+## Synchronous approach
+
+- Client send a POST request to create a post with image
+- API uploads the image to BlobStorage, saves Post in DB
+- API return newly create post in response to Client
+
+This approach is simplest design, but drawback is that we force the client to wait until image is processed and uploaded 
+
+![Code models (8)](https://user-images.githubusercontent.com/36125138/199660965-6bfaf902-215e-40d5-9a0c-2d9636952a7b.jpg)
+
+
+## Asynchronous approach
+
+### [Asynchronous Request-Reply pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/async-request-reply)
+
+
+![Code models (12)](https://user-images.githubusercontent.com/36125138/199669459-f4e03f9c-3325-4500-a5c6-b23e58627f51.jpg)
+
+
+
+
 ## How to use API
 
 
