@@ -19,7 +19,7 @@ API that allows you to upload posts with images and comment on them
 
 I believe that endpoints pretty intuitive and doesn't need comprehensive documentation.
 
-But before creating and commenting posts, you need to register a user and get user access token.
+Before creating and commenting posts, you need to register a user and get user access token.
 
 Register user
 
@@ -30,21 +30,18 @@ POST api/v1/users
   "password": "pass@#"
 }
 
-RESPONE 200
-
 ```
 
 Get user access token (JWT)
 
 ```
 POST api/v1/users/access-token
-
 {
   "email": "some@email.com",
   "password": "pass@#"
 }
 
-RESPONE 200
+RESPONE
 {
   "token": {ACEESS_TOKEN}
 }
@@ -76,7 +73,7 @@ Now app can be deployed on Azure (or any other infrastructure).
 
 There are some integration tests with Database.
 
-So if you want to run them, be sure that you specified connstring string for SQL Server in `test-settings.json`
+So if you want to run them, be sure that you specified connection string for SQL Server in `test-settings.json`
 
 ```
 {
@@ -88,8 +85,6 @@ I know, it's not convenient to be dependent on local environment when it comes t
 It's better to wrap them into docker-compose and run all dependents services in docker. 
 But for now, it's not implemented. Kindly ask you to suffer a little)
 
-
-### **Product:**
 
 ## Future improvements
 
