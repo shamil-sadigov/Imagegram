@@ -55,9 +55,9 @@ ID      CommentCount    LastTimeUpdatedAt             Comments
 
 So we need to choose approriate cursor to be able identify the row in database.
 
-One option is to  create cursor based on (`CommentCount:LastTimeUpdatedAt`), but problem is that when client send us this cursor we could fail to identify which exactly row the cursor is pointing at, because there can be multiple rows with the same `CommentCount` and `LastTimeUpdatedAt` (for example post with IDs `4` and `2` has the same `CommentCount` and `LastTimeUpdatedAt`).
+One option is to  create cursor based on (`[CommentCount]:[LastTimeUpdatedAt]`), but problem is that when client send us this cursor we could fail to identify which exactly row the cursor is pointing at, because there can be multiple rows with the same `CommentCount` and `LastTimeUpdatedAt` (for example post with IDs `4` and `2` has the same `CommentCount` and `LastTimeUpdatedAt`).
 
-So, better option would be to create cursor base on (`[CommentCount]:[Ticks of LastTimeUpdatedAt]:[PostId]`)
+So, better option would be to create cursor base on (`[CommentCount]:[LastTimeUpdatedAt]:[PostId]`)
 
 
 ### How it works
