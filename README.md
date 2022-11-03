@@ -65,7 +65,7 @@ GET api/v1/posts?limit=5
 GET api/v1/posts?limit=5&after={endCursor}
 
 # Get to the previous page.
-GET api/v1/posts?limit=5&after={startCursor}
+GET api/v1/posts?limit=5&before={startCursor}
 
 ```
 
