@@ -52,9 +52,10 @@ RESPONE 200
 Now you can create/get post, add/delete comments on posts. But be sure to specify access token in HTTP header.
 `Authorization: Bearer {ACEESS_TOKEN}`
 
-## How to deploy
+## How to run/deploy
 
 Set connstring string for SQL Server and Azure Blob Storage in `appsettings.json`
+
 
 ```
 "ConnectionStrings": {
@@ -64,8 +65,27 @@ Set connstring string for SQL Server and Azure Blob Storage in `appsettings.json
 ...
 ```
 
+## How to run unit tests
+
+There are some integration tests with Database.
+
+So if you want to run them, be sure that you specified connstring string for SQL Server in `test-settings.json`
+
+
+No need to create empty database in SQL Server or containers in Blob Storage. It will be done on application startup. 
+
+```
+{
+    "SqlServerConnectionString": "..."
+}
+```
+
+I know, it's bad to be dependent on local environment. It's better to wrap integration tests into docker-compose and run all dependents services in docker. But for now, it's not implemented. Kindly ask you to suffer a little)
+
 
 ## Future improvements
+
+
 - Distributed cache
 - Make image uploading async
 - Improve cursor-based navigation
@@ -73,7 +93,7 @@ Set connstring string for SQL Server and Azure Blob Storage in `appsettings.json
 
 ### Notes
 
-In order to keep project simple, I skipped some points
+In order to keep project simple and not bloated, I skipped some points
 
 - EF migrations not added
 - No logging
