@@ -52,8 +52,17 @@ RESPONE 200
 Now you can create/get post, add/delete comments on posts. But be sure to specify access token in HTTP header.
 `Authorization: Bearer {ACEESS_TOKEN}`
 
-
 ## How to deploy
+
+Set connstring string for SQL Server and Azure Blob Storage in `appsettings.json`
+
+```
+"ConnectionStrings": {
+    "Database": "",
+    "BlobStorage": ""
+  }
+...
+```
 
 
 ## Future improvements
@@ -61,4 +70,14 @@ Now you can create/get post, add/delete comments on posts. But be sure to specif
 - Make image uploading async
 - Improve cursor-based navigation
 - Add CDN for images
+
+### Notes
+
+In order to keep project simple, I skipped some points
+
+- EF migrations not added
+- No logging
+- Password protection is lightweight
+- JWT has no expiration time
+- No caching
 
