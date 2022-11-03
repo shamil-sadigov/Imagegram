@@ -113,7 +113,7 @@ I know, it's not convenient to be dependent on local environment when it comes t
 It's better to wrap them into docker-compose and run all dependents services in docker. 
 But for now, it's not implemented. Kindly ask you to suffer a little)
 
-## What is missing for producion ?
+## What is missing to go to producion ?
 - We can add distributed cache (Redis) to improve response latency and lighten the load on database
 - We can configure CDN for images, to serve images faster
 
