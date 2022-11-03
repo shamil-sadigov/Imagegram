@@ -112,7 +112,7 @@ As you see `hasMoreItems = true` which means that there are more posts available
 
 ---
 
-Get second page, by specifying value of `endCursor` from the last response
+Get second page, by specifying value of `endCursor` from the last response in `after` parameter
 
 ```
 GET ...api/posts?limit=3&after=8:63802873431:3
@@ -184,7 +184,7 @@ As you see, `hasMoreItems = false` which means that there is not items, and we c
 
 ---
 
-Go back to previous page (third), by specifying value of `startCursor` from the last response
+Go back to previous page (third), by specifying value of `startCursor` from the last response in `before` parameter
 
 ```
 GET ...api/posts?limit=3&before=0:63802729431:9
