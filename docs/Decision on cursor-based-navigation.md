@@ -1,4 +1,4 @@
-# How cursor-based navigation works
+# How cursor-based navigation implemented
 
 Client should be able to retrieve posts via cursor-based pagination, and posts should be sorted by the number of comments (desc).
 
