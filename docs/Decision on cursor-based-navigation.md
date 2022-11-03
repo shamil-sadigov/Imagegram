@@ -20,7 +20,8 @@ ID      CommentCount    LastTimeUpdatedAt             Comments
 11      3               12.10.2022 12:12:51           [..., ...]    
 ```
 
-Here are posts that are sorted by number of comments (desc)
+Here are posts that are sorted by number of comments (desc).
+Actually it's also sorted by `LastTimeUpdatedAt` (desc).
 
 ```
 ID      CommentCount    LastTimeUpdatedAt             Comments
@@ -190,6 +191,7 @@ RESPONSE
 ```
 
 So, probably you got the point how it works.
+PS: Cursors are url encoded before they are sent to client, so they can look a little different than examples above.
 
 ---
 
