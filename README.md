@@ -113,13 +113,14 @@ I know, it's not convenient to be dependent on local environment when it comes t
 It's better to wrap them into docker-compose and run all dependents services in docker. 
 But for now, it's not implemented. Kindly ask you to suffer a little)
 
+## What is missing for producion ?
+- We can add distributed cache (Redis) to improve response latency and lighten the load on database
+- We can configure CDN for images, to serve images faster
 
 ## Future improvements
-
-- We can add distributed cache (Redis) to improve response latency and lighten the load on database
 - [Image uploading can be made async](https://github.com/shamil-sadigov/Imagegram/blob/master/docs/Decision%20on%20sync%20vs%20async%20image%20uploading.md#asynchronous-approach-with-websockets)
 - Improve cursor-based navigation by trying [this solution](https://phauer.com/2017/web-api-pagination-continuation-token/) to prevent the [problem of dynamically chaning posts](https://github.com/shamil-sadigov/Imagegram/blob/master/docs/Decision%20on%20cursor-based-navigation.md#problem)
-- We can configure CDN for images, to serve images faster
+
 
 ### Notes
 
