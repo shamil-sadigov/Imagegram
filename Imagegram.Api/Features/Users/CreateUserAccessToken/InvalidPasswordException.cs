@@ -11,6 +11,6 @@ public class InvalidPasswordException:Exception
 
     private static string BuildMessage(string email)
     {
-        return $"ProtectedPassword provided for email '{email}' is not valid";
+        return $"Password provided for email '{email}' is not valid";
     }
 }
