@@ -15,9 +15,7 @@ public abstract class BasePaginationStrategy:IPaginationStrategy<PostDto, PostCu
             post.CreatedAt, 
             post.Description, 
             post.Image.ProcessedImage.Uri, 
-            post.CommentCount < 1
-                ? null
-                : post.Comments!.OrderByDescending(c => c.CreatedAt)
+            post.Comments.OrderByDescending(c => c.CreatedAt)
                     .Take(2)
                     .Select(c => new CommentDto(c.Id, c.Text, c.CommentedBy)));
 

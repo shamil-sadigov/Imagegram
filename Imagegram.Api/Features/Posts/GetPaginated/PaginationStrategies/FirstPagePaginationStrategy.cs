@@ -24,6 +24,7 @@ public class FirstPagePaginationStrategy:BasePaginationStrategy
             .OrderByDescending(post => post.CommentCount)
               .ThenByDescending(post => post.LastTimeUpdatedAt)
                 .ThenByDescending(post => post.Id)
+            .Include(x=> x.Comments)
             .Take(prefetchCount)
             .Select(post => ProjectToDto(post))
             .ToListAsync();

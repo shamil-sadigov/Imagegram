@@ -31,6 +31,7 @@ public class NextPagePaginationStrategy:BasePaginationStrategy
             .OrderByDescending(post => post.CommentCount)
             .ThenByDescending(post => post.LastTimeUpdatedAt)
             .ThenByDescending(post => post.Id)
+            .Include(x=> x.Comments)
 
             // If there are posts with the same 'CommentCount' and same 'LastTimeUpdatedAt' 
             // then return only those which Id < cursor.PostId
