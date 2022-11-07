@@ -30,7 +30,7 @@ public class UsersController : ControllerBase
     
     [AllowAnonymous]
     [HttpPost("access-token")]
-    public async Task<IActionResult> GetAccessToken([FromBody] GetAccessTokenRequest request, CancellationToken token)
+    public async Task<IActionResult> GetUserAccessToken([FromBody] GetAccessTokenRequest request, CancellationToken token)
     {
         var userAccessToken = await _mediator.Send(new CreateUserAccessTokenCommand(request.Email, request.Password), token);
 

@@ -28,7 +28,7 @@ public class PostsController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<PaginatedPostsResponse> GetPaginates([FromQuery] GetPostsRequest request, CancellationToken token)
+    public async Task<PaginatedPostsResponse> GetPaginatedPosts([FromQuery] GetPostsRequest request, CancellationToken token)
     {
         (PageSize pageSize, PostCursor? beforeCursor, PostCursor? afterCursor) = BuildQueryParameters(request);
 
@@ -53,7 +53,7 @@ public class PostsController : ControllerBase
     /// <param name="includeComments">If 'true' then post will be returned along with comments</param>
     /// <returns></returns>
     [HttpGet("{postId:int}")]
-    public async Task<PostDto> Get(int postId, bool includeComments, CancellationToken token)
+    public async Task<PostDto> GetPostById(int postId, bool includeComments, CancellationToken token)
     {
         var post = await _mediator.Send(new GetPostQuery(postId, includeComments), token);
         return post;
@@ -68,7 +68,7 @@ public class PostsController : ControllerBase
         var createdPost = await _mediator.Send(
             new CreatePostCommand(currentUserId, request.Description, request.ImageFile), token);
         
-        return CreatedAtAction(nameof(Get), new
+        return CreatedAtAction(nameof(GetPostById), new
         {
             postId = createdPost.PostId
         }, createdPost);
