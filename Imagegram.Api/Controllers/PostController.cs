@@ -59,29 +59,6 @@ public class PostsController : ControllerBase
         return post;
     }
     
-    private static (PageSize pageSize, PostCursor? beforeCursor, PostCursor? afterCursor) BuildQueryParameters(
-        GetPostsRequest request)
-    {
-        // Only one of the cursor is specified, or non of them.
-        
-        var pageSize = new PageSize(request.Limit);
-        
-        if (!string.IsNullOrWhiteSpace(request.BeforeCursor) )
-        {
-            PostCursor.TryCreateFromUrlEncoded(request.BeforeCursor, out var beforeCursor);
-            return (pageSize, beforeCursor, null);
-        }
-        
-        if (!string.IsNullOrWhiteSpace(request.AfterCursor))
-        {
-            PostCursor.TryCreateFromUrlEncoded(request.AfterCursor, out var afterCursor);
-            return (pageSize, null, afterCursor);
-        }
-
-        return (pageSize, null, null);
-    }
-
-    
     [HttpPost]
     [RequestSizeLimit(105857600)]
     public async Task<IActionResult> CreatePost([FromForm] CreatePostRequest request, CancellationToken token)
@@ -124,4 +101,27 @@ public class PostsController : ControllerBase
         
         return NoContent();
     }
+    
+    private static (PageSize pageSize, PostCursor? beforeCursor, PostCursor? afterCursor) BuildQueryParameters(
+        GetPostsRequest request)
+    {
+        // Only one of the cursor is specified, or non of them.
+        
+        var pageSize = new PageSize(request.Limit);
+        
+        if (!string.IsNullOrWhiteSpace(request.BeforeCursor) )
+        {
+            PostCursor.TryCreateFromUrlEncoded(request.BeforeCursor, out var beforeCursor);
+            return (pageSize, beforeCursor, null);
+        }
+        
+        if (!string.IsNullOrWhiteSpace(request.AfterCursor))
+        {
+            PostCursor.TryCreateFromUrlEncoded(request.AfterCursor, out var afterCursor);
+            return (pageSize, null, afterCursor);
+        }
+
+        return (pageSize, null, null);
+    }
+
 }

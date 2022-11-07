@@ -30,6 +30,7 @@ public class GetPostsQueryHandler : IRequestHandler<GetPostsQuery, PaginatedResu
             _ => throw new InvalidOperationException($"Unexpected query {query}")
         };
 
+        // TODO: Add Comment author name into CommentDto
         return paginatedResult;
     }
 }
